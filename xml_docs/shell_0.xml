@@ -3,24 +3,23 @@
 <?xml-stylesheet type="text/xsl" href="lgtxml.xsl"?>
 <logtalk>
 <entity>
-<name><![CDATA[rule_expansion]]></name>
+<name><![CDATA[shell]]></name>
 <type>object</type>
 <compilation>static, context_switching_calls</compilation>
-<comment><![CDATA[Expands rules of the form p <- f & g to the more manageable
-        rule(p, [f,g]).]]></comment>
+<comment><![CDATA[Interpreter using a breadth-first search.]]></comment>
 <author><![CDATA[Victor Lagerkvist]]></author>
 <version>0.1</version>
-<date>2010/3/18</date>
+<date>2010/3/23</date>
 </entity>
 <relations>
-<implements>
-<name><![CDATA[expanding]]></name>
-<scope>public</scope>
-<file><![CDATA[expanding_0]]></file>
-</implements>
 </relations>
 <predicates>
 <public>
+<predicate>
+<name><![CDATA[repl/0]]></name>
+<scope>public</scope>
+<compilation>static</compilation>
+</predicate>
 </public>
 <protected>
 </protected>

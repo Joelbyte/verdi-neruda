@@ -3,24 +3,28 @@
 <?xml-stylesheet type="text/xsl" href="lgtxml.xsl"?>
 <logtalk>
 <entity>
-<name><![CDATA[rule_expansion]]></name>
+<name><![CDATA[shell(A)]]></name>
 <type>object</type>
-<compilation>static, context_switching_calls</compilation>
-<comment><![CDATA[Expands rules of the form p <- f & g to the more manageable
-        rule(p, [f,g]).]]></comment>
+<compilation>dynamic, context_switching_calls</compilation>
+<comment><![CDATA[Prolog shell for the interpreters.]]></comment>
 <author><![CDATA[Victor Lagerkvist]]></author>
 <version>0.1</version>
-<date>2010/3/18</date>
+<date>2010/3/23</date>
 </entity>
 <relations>
-<implements>
-<name><![CDATA[expanding]]></name>
-<scope>public</scope>
-<file><![CDATA[expanding_0]]></file>
-</implements>
 </relations>
 <predicates>
 <public>
+<predicate>
+<name><![CDATA[init/0]]></name>
+<scope>public</scope>
+<compilation>dynamic</compilation>
+</predicate>
+<predicate>
+<name><![CDATA[dispatch/1]]></name>
+<scope>public</scope>
+<compilation>dynamic</compilation>
+</predicate>
 </public>
 <protected>
 </protected>
