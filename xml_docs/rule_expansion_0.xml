@@ -6,7 +6,7 @@
 <name><![CDATA[rule_expansion]]></name>
 <type>object</type>
 <compilation>static, context_switching_calls</compilation>
-<comment><![CDATA[Expands rules of the form p <- f & g to the more manageble
+<comment><![CDATA[Expands rules of the form p <- f & g to the more manageable
 		rule(p, [f,g]).]]></comment>
 <author><![CDATA[Victor Lagerkvist]]></author>
 <version>0.1</version>

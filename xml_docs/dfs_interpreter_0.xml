@@ -4,7 +4,7 @@
 <logtalk>
 <entity>
 <name><![CDATA[dfs_interpreter]]></name>
-<type>category</type>
+<type>object</type>
 <compilation>static, context_switching_calls</compilation>
 <comment><![CDATA[Simple interpreter using a depth-first search.]]></comment>
 <author><![CDATA[Victor Lagerkvist]]></author>

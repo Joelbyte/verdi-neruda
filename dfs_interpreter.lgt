@@ -1,5 +1,5 @@
 
-:- category(dfs_interpreter,
+:- object(dfs_interpreter,
 		    implements(interpreterp)).	
 
 	:- info([
@@ -9,13 +9,13 @@
 		comment is 'Simple interpreter using a depth-first search.']).
 
 	prove(Goal) :-
-	    rule(Goal, Body),
-	    prove_body(Body).
+	    prove_body([Goal]).
 
     prove_body([]).
+	prove_body([not(Goal)|Goals]) :-
+	    (prove(Goal) -> fail ; prove_body(Goals)).
     prove_body([Goal|Goals]) :-
-	    rule(Goal, Body),
-	    prove_body(Body),
-	    prove_body(Goals).
+	    database::rule(Goal, Body, Goals),
+	    prove_body(Body).
 
-:- end_category.
+:- end_object.

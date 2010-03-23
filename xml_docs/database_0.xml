@@ -8,16 +8,11 @@
 <compilation>static, context_switching_calls</compilation>
 </entity>
 <relations>
-<imports>
-<name><![CDATA[dfs_interpreter]]></name>
-<scope>public</scope>
-<file><![CDATA[dfs_interpreter_0]]></file>
-</imports>
 </relations>
 <predicates>
 <public>
 <predicate>
-<name><![CDATA[p/1]]></name>
+<name><![CDATA[rule/3]]></name>
 <scope>public</scope>
 <compilation>static</compilation>
 </predicate>
