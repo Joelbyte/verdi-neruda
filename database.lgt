@@ -1,14 +1,14 @@
 
 :- object(database).
 
-	:- public(rule/3).
+    :- public(rule/3).
 
     append([], Ys, Ys) <- true.
     append([X|Xs], Ys, [X|Zs]) <-
         append(Xs, Ys, Zs).        
 
-	nrev([], []) <- true.
-	nrev([X|Xs], Reversed) <-
+    nrev([], []) <- true.
+    nrev([X|Xs], Reversed) <-
         nrev(Xs, Reversed1) &
         append(Reversed1, [X], Reversed).
 
@@ -17,12 +17,12 @@
 
     g(1) <- true.
 
-	edge(a, b) <- true.
+    edge(a, b) <- true.
     edge(b, c) <- true.
 
-	connected(X, Y) <- edge(X, Y).
+    connected(X, Y) <- edge(X, Y).
     connected(X, Z) <-
-	    edge(X,Y) &
-		connected(Y, Z).
+        edge(X,Y) &
+        connected(Y, Z).
 
 :- end_object.
