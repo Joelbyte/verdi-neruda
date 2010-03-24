@@ -20,11 +20,6 @@
 <scope>public</scope>
 <compilation>dynamic</compilation>
 </predicate>
-<predicate>
-<name><![CDATA[dispatch/1]]></name>
-<scope>public</scope>
-<compilation>dynamic</compilation>
-</predicate>
 </public>
 <protected>
 </protected>

@@ -10,8 +10,7 @@
         comment is 'Prolog shell for the interpreters.']).
 
     :- public(init/0).
-    :- public(dispatch/1).
-
+ 
     init :-
         writeln('Welcome, noble adventurer, your destiny awaits you.'),
         writeln('Type help. for online help'),
@@ -20,30 +19,53 @@
     repl :-
         write('>> '),
         read(X),
-        dispatch(X).
-    repl :-
-        repl. 
-
-    dispatch(halt).
-    dispatch(help) :-
-        write_help_message,
+        dispatch(X),
         repl.
-    dispatch(listing) :-
+
+    dispatch(halt) :- !,
+        halt.
+    dispatch(help) :- !,
+        write_help_message.
+    dispatch(listing) :- !,
         findall(rule(Head, Body), database::rule(Head, Body, _), Rules),
         meta::map(write_rule, Rules).
-    dispatch(programs) :-
+    dispatch(programs) :- !,
         findall(Functor/Arity,
                 (database::rule(Head, _, _),
                  functor(Head, Functor, Arity)),
                 Functors),
         sort(Functors, SortedFunctors),
         meta::map(writeln, SortedFunctors).
-    dispatch(prove(Interpreter, Goal)) :-
+    dispatch(prove(Interpreter, Goal)) :- !,
         this(shell(Interpreters)),
         member(Interpreter, Interpreters),
-        Interpreter::prove(Goal),
-        writeln(Goal).
+        prove(Interpreter, Goal).
+    dispatch(benchmark(Interpreter, Statistic, N, Goal)) :- !,
+        benchmark(Interpreter, Statistic, N, Goal, Res0),
+        write(Statistic), write(': '),
+        Res is Res0/N,
+        writeln(Res).
+    dispatch((Goal1, Goal2)) :- !,
+        dispatch(Goal1),
+        dispatch(Goal2).
+    dispatch(Goal) :-
+        prove(dfs_interpreter, Goal).
 
+    benchmark(_, _, 0, _, 0) :- !.
+    benchmark(Interpreter, Statistic, N, Goal, Res) :-
+        N1 is N - 1,
+        benchmark(Interpreter, Statistic, N1, Goal, Res0),
+        statistics(Statistic, Before),
+        Interpreter::prove(Goal), !,
+        statistics(Statistic, After),
+        Res is Res0 + (After - Before).
+
+    prove(Interpreter, Goal) :-
+        Interpreter::prove(Goal),
+        writeln(Goal),
+        (get_single_char(110) -> fail ; !).
+    prove(_, _).
+    
     write_help_message :-
         writeln('Available commands are:'),
         findall(Command, ::clause(dispatch(Command), _), Commands),

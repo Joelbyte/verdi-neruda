@@ -3,6 +3,10 @@
 
     :- public(rule/3).
 
+    member(X, [X|_]) <- true.
+    member(X, [_|Xs]) <-
+        member(X, Xs).
+
     append([], Ys, Ys) <- true.
     append([X|Xs], Ys, [X|Zs]) <-
         append(Xs, Ys, Zs).        
