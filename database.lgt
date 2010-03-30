@@ -22,11 +22,13 @@
     g(1) <- true.
 
     edge(a, b) <- true.
+    edge(a, z) <- true.
     edge(b, c) <- true.
 
-    connected(X, Y) <- edge(X, Y).
     connected(X, Z) <-
         edge(X,Y) &
         connected(Y, Z).
+    connected(X, Y) <- edge(X, Y).
+
 
 :- end_object.

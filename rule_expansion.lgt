@@ -11,6 +11,8 @@
         comment is 'Expands rules of the form p <- f & g to the more manageable
         rule(p, [f,g]).']).
 
+    :- protected(flatten_goals/3).
+
     term_expansion((Head <- Goals), rule(Head, List, Tail)) :-
         flatten_goals(Goals, List, Tail).
 

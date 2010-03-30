@@ -20,34 +20,40 @@
         write('>> '),
         read(X),
         dispatch(X),
+        (get_single_char(110) -> fail ; !),
+        repl.
+    repl :-
+        writeln('no'),
         repl.
 
-    dispatch(halt) :- !,
+    dispatch(halt) :-
         halt.
-    dispatch(help) :- !,
+    dispatch(help) :-
         write_help_message.
-    dispatch(listing) :- !,
+    dispatch(listing) :-
         findall(rule(Head, Body), database::rule(Head, Body, _), Rules),
         meta::map(write_rule, Rules).
-    dispatch(programs) :- !,
+    dispatch(programs) :-
         findall(Functor/Arity,
                 (database::rule(Head, _, _),
                  functor(Head, Functor, Arity)),
                 Functors),
         sort(Functors, SortedFunctors),
         meta::map(writeln, SortedFunctors).
-    dispatch(prove(Interpreter, Goal)) :- !,
+    dispatch(prove(Interpreter, Goal)) :-
         this(shell(Interpreters)),
         member(Interpreter, Interpreters),
         prove(Interpreter, Goal).
-    dispatch(benchmark(Interpreter, Statistic, N, Goal)) :- !,
+    dispatch(benchmark(Interpreter, Statistic, N, Goal)) :-
+        this(shell(Interpreters)),
+        member(Interpreter, Interpreters),
         benchmark(Interpreter, Statistic, N, Goal, Res0),
         write(Statistic), write(': '),
         Res is Res0/N,
         writeln(Res).
-    dispatch((Goal1, Goal2)) :- !,
-        dispatch(Goal1),
-        dispatch(Goal2).
+    dispatch(Goal & Goals) :-
+        dispatch(Goal),
+        dispatch(Goals).
     dispatch(Goal) :-
         prove(dfs_interpreter, Goal).
 
@@ -62,9 +68,7 @@
 
     prove(Interpreter, Goal) :-
         Interpreter::prove(Goal),
-        writeln(Goal),
-        (get_single_char(110) -> fail ; !).
-    prove(_, _).
+        writeln(Goal).
     
     write_help_message :-
         writeln('Available commands are:'),
