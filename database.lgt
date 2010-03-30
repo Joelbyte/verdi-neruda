@@ -25,7 +25,7 @@
     edge(a, z) <- true.
     edge(b, c) <- true.
 
-    connected(X, Z) <-
+    connected(X, Z) <-     
         edge(X,Y) &
         connected(Y, Z).
     connected(X, Y) <- edge(X, Y).

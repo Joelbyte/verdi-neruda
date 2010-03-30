@@ -1,5 +1,5 @@
 :- initialization((
-    Interpreters = [dfs_interpreter, bfs_interpreter],
+    Interpreters = [dfs_interpreter, bfs_interpreter, iddfs_interpreter],
     logtalk_load(library(all_loader)),
     logtalk_load(rule_expansion),
     logtalk_load(shell_expansion),
