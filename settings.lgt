@@ -122,13 +122,13 @@ logtalk_library_path(my_project_examples, my_project('examples/')).
 %  (X)HTML or PDF documentation of your project edit and uncomment the
 %  following lines:
 
-/*
+
 :- initialization((
 	set_logtalk_flag(altdirs, on),
 	set_logtalk_flag(xmldocs, on),
-	set_logtalk_flag(xmldir, '$HOME/my_project_docs/')
+	set_logtalk_flag(xmldir, 'xml_docs/')
 )).
-*/
+
 
 
 %  To develop portable Logtalk applications uncomment the following lines:
