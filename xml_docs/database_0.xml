@@ -5,7 +5,7 @@
 <entity>
 <name><![CDATA[database]]></name>
 <type>object</type>
-<compilation>static, context_switching_calls</compilation>
+<compilation>dynamic, context_switching_calls</compilation>
 </entity>
 <relations>
 </relations>
@@ -14,7 +14,7 @@
 <predicate>
 <name><![CDATA[rule/3]]></name>
 <scope>public</scope>
-<compilation>static</compilation>
+<compilation>dynamic</compilation>
 </predicate>
 </public>
 <protected>

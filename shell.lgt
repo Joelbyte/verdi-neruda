@@ -42,11 +42,13 @@
         meta::map(writeln, SortedFunctors).
     dispatch(prove(Interpreter, Goal)) :-
         this(shell(Interpreters)),
-        member(Interpreter, Interpreters),
+        member(Interpreter - Expander, Interpreters),
+        load_database(Expander), 
         prove(Interpreter, Goal).
     dispatch(benchmark(Interpreter, Statistic, N, Goal)) :-
         this(shell(Interpreters)),
-        member(Interpreter, Interpreters),
+        member(Interpreter - Expander, Interpreters),
+        load_database(Expander),
         benchmark(Interpreter, Statistic, N, Goal, Res0),
         write(Statistic), write(': '),
         Res is Res0/N,
@@ -69,6 +71,9 @@
     prove(Interpreter, Goal) :-
         Interpreter::prove(Goal),
         writeln(Goal).
+
+    load_database(Expander) :-
+        logtalk_load(database, [hook(Expander), startup_message(none)]). 
     
     write_help_message :-
         writeln('Available commands are:'),

@@ -1,6 +1,8 @@
 
 :- object(database).
 
+    :- dynamic.
+
     :- public(rule/3).
 
     member(X, [X|_]) <- true.
