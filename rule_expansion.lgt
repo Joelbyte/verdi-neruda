@@ -13,6 +13,8 @@
 
     :- protected(flatten_goals/3).
 
+    term_expansion(builtin(Goal), (rule(Goal, T, T) :- Goal)).
+
     term_expansion((Head <- Goals), rule(Head, List, Tail)) :-
         flatten_goals(Goals, List, Tail).
 

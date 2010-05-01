@@ -24,10 +24,8 @@
         %%argument which keeps track of the length of the queue.
         (Tail == Tail2 -> !, fail ; true),
         Tail = [state([], Bindings)|Tail1],
-        (Tail1 == Tail2 -> ! ; true),        
+        (Tail1 == Tail2 -> ! ; true),
         execute_bindings(Bindings).
-        %%For some reason this is dog-slow.
-        %meta::map(call, Bindings).
     prove1([state([not(Goal)|Goals], Bindings)|Tail1], Tail2) :-
         (prove(Goal) ->
            fail
@@ -37,6 +35,7 @@
         ).
     prove1([Goal|Goals], Tail1) :-
         expand_goal1(Goal, Tail1, Tail),
+        %write('Expanded goals are: '), writeln(Goals),
         prove1(Goals, Tail).
 
     prove2([state([], Bindings)|_]) :-
@@ -53,7 +52,7 @@
         %%new body with Goals. Goal in the template is a placeholder,
         %%and is later used in add_bindings/5 to create a unifier
         %%between the old goal and the resolvent.
-        bagof(state(Body, Goal),
+        findall(state(Body, Goal),
             database::rule(Goal, Body, Goals),
             NewGoals0),
         !,

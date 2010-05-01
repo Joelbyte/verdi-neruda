@@ -10,7 +10,7 @@
     :- public(prove/1).
     :- mode(prove(+goal), zero_or_more).
     :- info(prove/1, [
-        comment is 'True if goal is true.',
+        comment is 'True if goal is provable.',
         argnames is ['Goal']]).
 
 :- end_protocol.

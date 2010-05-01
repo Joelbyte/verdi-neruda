@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE logtalk SYSTEM "logtalk.dtd">
+<?xml-stylesheet type="text/xsl" href="lgtxml.xsl"?>
+<logtalk>
+<entity>
+<name><![CDATA[magic]]></name>
+<type>object</type>
+<compilation>static, context_switching_calls</compilation>
+<comment><![CDATA[Object encapsulating magic methods.]]></comment>
+<author><![CDATA[Ulf Nilsson. Ported to Logtalk and augmented with negation by Victor Lagerkvist.]]></author>
+<version>0.1</version>
+<date>2010/4/15</date>
+</entity>
+<relations>
+</relations>
+<predicates>
+<public>
+<predicate>
+<name><![CDATA[magicise/4]]></name>
+<scope>public</scope>
+<compilation>static</compilation>
+<mode>
+<template><![CDATA[magicise(+term, +list, -term, -list)]]></template>
+<solutions>zero_or_one</solutions>
+</mode>
+<comment><![CDATA[Transform (Head :- Body) into a magic clause (NewHead :- NewBody).]]></comment>
+<template><![CDATA[magicise(Head, Body, NewHead, NewBody)]]></template>
+</predicate>
+<predicate>
+<name><![CDATA[magic/2]]></name>
+<scope>public</scope>
+<compilation>static</compilation>
+<mode>
+<template><![CDATA[magic(+term, -term)]]></template>
+<solutions>zero_or_one</solutions>
+</mode>
+<comment><![CDATA[Prefix the predicate symbol of Old with magic_.]]></comment>
+<template><![CDATA[magic(Old, New)]]></template>
+</predicate>
+</public>
+<protected>
+</protected>
+<private>
+</private>
+</predicates>
+<remarks>
+</remarks>
+</logtalk>

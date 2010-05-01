@@ -3,31 +3,31 @@
 <?xml-stylesheet type="text/xsl" href="lgtxml.xsl"?>
 <logtalk>
 <entity>
-<name><![CDATA[interpreterp]]></name>
-<type>protocol</type>
+<name><![CDATA[magic_expansion]]></name>
+<type>object</type>
 <compilation>static, context_switching_calls</compilation>
-<comment><![CDATA[Protocol for an interpreter.]]></comment>
+<comment><![CDATA[Expands rules of the form p <- f & g to the more manageable
+        rule(p, [f,g]) and performs magic transformation of clauses.]]></comment>
 <author><![CDATA[Victor Lagerkvist]]></author>
 <version>0.1</version>
-<date>2010/3/18</date>
+<date>2010/4/15</date>
 </entity>
 <relations>
+<implements>
+<name><![CDATA[expanding]]></name>
+<scope>public</scope>
+<file><![CDATA[expanding_0]]></file>
+</implements>
 </relations>
 <predicates>
 <public>
-<predicate>
-<name><![CDATA[prove/1]]></name>
-<scope>public</scope>
-<compilation>static</compilation>
-<mode>
-<template><![CDATA[prove(+goal)]]></template>
-<solutions>zero_or_more</solutions>
-</mode>
-<comment><![CDATA[True if goal is provable.]]></comment>
-<template><![CDATA[prove(Goal)]]></template>
-</predicate>
 </public>
 <protected>
+<predicate>
+<name><![CDATA[flatten_goals/3]]></name>
+<scope>protected</scope>
+<compilation>static</compilation>
+</predicate>
 </protected>
 <private>
 </private>
