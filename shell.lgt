@@ -49,7 +49,10 @@
         this(shell(Interpreters)),
         member(Interpreter - Expander, Interpreters),
         load_database(Expander),
-        benchmark(Interpreter, Statistic, N, Goal, Res0),
+        (   benchmark(Interpreter, Statistic, N, Goal, Res0)
+        ;   benchmark_failure(Interpreter, Statistic, N, Goal, Res0),
+            write('(failure) ')
+        ),
         write(Statistic), write(': '),
         Res is Res0/N,
         writeln(Res).
@@ -65,6 +68,15 @@
         benchmark(Interpreter, Statistic, N1, Goal, Res0),
         statistics(Statistic, Before),
         Interpreter::prove(Goal), !,
+        statistics(Statistic, After),
+        Res is Res0 + (After - Before).
+
+    benchmark_failure(_, _, 0, _, 0) :- !.
+    benchmark_failure(Interpreter, Statistic, N, Goal, Res) :-
+        N1 is N - 1,
+        benchmark_failure(Interpreter, Statistic, N1, Goal, Res0),
+        statistics(Statistic, Before),
+        \+ Interpreter::prove(Goal), !,
         statistics(Statistic, After),
         Res is Res0 + (After - Before).
 

@@ -11,6 +11,7 @@
     logtalk_load(magic_expansion),
     logtalk_load(shell_expansion),
     logtalk_load(heuristic_expansion),
+    logtalk_load(benchmark_generators),
     logtalk_load(database, [hook(rule_expansion)]),
     logtalk_load(interpreterp),
     logtalk_load(magic),

@@ -7,7 +7,7 @@
 <type>object</type>
 <compilation>static, context_switching_calls</compilation>
 <comment><![CDATA[Object encapsulating magic methods.]]></comment>
-<author><![CDATA[Ulf Nilsson. Ported to Logtalk and augmented with negation by Victor Lagerkvist.]]></author>
+<author><![CDATA[Ulf Nilsson. Ported to Logtalk and augmented with stratified negation by Victor Lagerkvist.]]></author>
 <version>0.1</version>
 <date>2010/4/15</date>
 </entity>
