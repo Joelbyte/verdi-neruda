@@ -28,81 +28,99 @@
     %     append(Xs, Ys, Zs).        
 
     %%Benchmark 1 - naive reverse.
-/*    nrev([], []) <- true.
+/*
+    nrev([], []) <- true.
     nrev([X|Xs], Reversed) <-
         nrev(Xs, Reversed1) &
         append(Reversed1, [X], Reversed).
+
+    bench(nrev("abcde", "edcba")) <- true.
+    bench(nrev("abcdefghij", "jihgfedcba")) <- true.
+    permute([nrev(_, _) <- all]).
 */
 
     %% Benchmark 2 - transitive closure of edge/2.
-/*    edge(a, b) <- true.
-    edge(a, c) <- true.
-    edge(b, c) <- true.
-    edge(c, d) <- true.
+/*
+    edge(1, 3) <- true.
+    edge(3, 5) <- true.
+    edge(5, 7) <- true.
+    edge(7, 9) <- true.
 
+    edge(0, 2) <- true.
+    edge(2, 4) <- true.
+    edge(4, 6) <- true.
+    edge(6, 8) <- true.
+
+    edge(1, 0) <- true.
+    edge(3, 2) <- true.
+    edge(5, 4) <- true.
+    edge(7, 8) <- true.
+    edge(9, 8) <- true.
+
+    edge(0, 3) <- true.
+    edge(2, 5) <- true.
+    edge(4, 7) <- true.
+    edge(6, 9) <- true.
 
     connected(X, Z) <-     
         edge(X,Y) &
         connected(Y, Z).
     connected(X, Y) <- edge(X, Y).
+
+    bench(connected(1, 2)) <- true.
+    bench(connected(1, 3)) <- true.
+    bench(connected(1, 4)) <- true.
+    bench(connected(1, 5)) <- true.
+    bench(connected(1, 6)) <- true.
+    bench(connected(1, 7)) <- true.
+    bench(connected(1, 8)) <- true.
+    bench(connected(1, 9)) <- true.
+
+    permute([connected(_, _) <- all]).
 */
 
     %% Benchmark 3 - calculating the n:th Fibonacci number recursively.
+
 /*
     fib_rec(1, 1) <- true.
     fib_rec(2, 1) <- true.
     fib_rec(N, X) <- 
-        compare(>, N, 2) & 
-        plus(N, -1, N1) &
+        N > 2 & 
+        N1 is N - 1 &
         fib_rec(N1, X1) &
-        plus(N, -2, N2) &
+        N2 is N - 2 &
         fib_rec(N2, X2) &
-        plus(X1, X2, X).
+        X is X1 + X2. 
+
+    bench(fib_rec(5, 5)) <- true.
+    bench(fib_rec(10, 55)) <- true.
+
+    permute([fib_rec(_, _) <- [N > 2]]).
 */
+
     %% Benchmark 3 - calculating the n:th Fibonacci number iteratively.
 /*
     fib_iter(1, 1) <- true.
     fib_iter(2, 1) <- true.
     fib_iter(N, X) <- 
-        compare(>, N, 2) &
+        N > 2 &
         fib_iter(2, N, 1, 1, X).
 
     fib_iter(N, N, X, _, X) <- true.
     fib_iter(N0, N, X2, X1, X) <-
-        compare(<, N0, N) &
-        plus(N0, 1, N1) &
-        plus(X2, X1, X3) &
+        N0 < N &
+        N1 is N0 + 1 &
+        X3 is X2 + X1 &
         fib_iter(N1, N, X3, X2, X).
+
+    bench(fib_iter(5, 5)) <- true.
+    bench(fib_iter(10, 55)) <- true.
+
+    permute([fib_iter(_, _, _, _, _) <- [_ < _]]).
 */
-    %% Benchmark 4 - calculating the n:th Fibonacci number with a generator.
-    %% Perhaps it is not necessary?
-/*
-    fib_gen(N, X) <- 
-        make_fibonacci(State0) &
-        fib_gen(N, State0, X).
-
-    fib_gen(0, s0, 1) <- true.
-    fib_gen(0, s1(1), 1) <- true.
-    fib_gen(0, s2(X, _), X) <- true.
-    fib_gen(N, State0, X) <- 
-        compare(>, N, 0) &
-        fibonacci_next(_, State0, State) &
-        plus(N, -1, N0) &
-        fib_gen(N0, State, X).
-
-    make_fibonacci(s0) <- true.
-
-    fibonacci_next(Fib, State0, State) <-
-        next_fibonacci(State0, Fib, State).
-
-    next_fibonacci(s0, 1, s1(1)) <- true.
-    next_fibonacci(s1(X1), 1, s2(1, X1)) <- true.
-    next_fibonacci(s2(X2, X1), X3, s2(X3, X2)) <-
-        plus(X2, X1, X3).
-*/
-
-    %% Benchmark 5 - Determining whether two binary trees are isomorphic.
+    %% Benchmark 4 - Determining whether two binary trees are isomorphic.
     %% TODO: Decide how the trees should be generated.
+
 /*
     isotree(void, void) <- true.
     isotree(t(X, L1, R1), t(X, L2, R2)) <-
@@ -111,16 +129,35 @@
     isotree(t(X, L1, R1), t(X, L2, R2)) <-
         isotree(L1, R2) &
         isotree(R1, L2).
-*/
-    %% Benchmark 6 - Parsing natural language with a DCG.
 
-    %% Benchmark 7 - solving the mu-puzzle from GEB.
+    tree1(t(2, t(3, t(0, t(2, void, void), t(0, t(0, void, void), t(0, t(0, void, void), t(0, void, void)))), t(1, void, void)), t(0, t(0, t(3, void, void), t(0, void, void)), t(2, t(4, void, void), t(3, t(2, void, void), t(3, void, void)))))) <- true.
+
+    tree1_iso(t(2, t(3, t(0, t(2, void, void), t(0, t(0, void, void), t(0, t(0, void, void), t(0, void, void)))), t(1, void, void)), t(0, t(2, t(3, t(2, void, void), t(3, void, void)), t(4, void, void)), t(0, t(0, void, void), t(3, void, void))))) <- true.
+
+    tree2(t(1, t(3, t(1, void, void), t(3, void, void)), t(1, t(4, t(4, void, void), t(2, t(2, t(0, void, void), t(4, void, void)), t(4, void, void))), t(1, t(1, t(2, void, void), t(2, void, void)), t(0, t(2, void, void), t(3, void, void)))))) <- true.
+
+    tree2_iso(t(1, t(3, t(1, void, void), t(3, void, void)), t(1, t(4, t(2, t(4, void, void), t(2, t(4, void, void), t(0, void, void))), t(4, void, void)), t(1, t(0, t(2, void, void), t(3, void, void)), t(1, t(2, void, void), t(2, void, void)))))) <- true.
+
+    tree3(t(1, t(3, t(1, void, void), t(3, void, void)), t(1, t(4, t(4, void, void), t(2, t(2, t(0, void, void), t(4, void, void)), t(4, void, void))), t(1, t(1, t(2, void, void), t(2, void, void)), t(0, t(2, void, void), t(3, void, void)))))) <- true.
+
+    tree3_non_iso(t(1, t(3, t(1, void, void), t(3, void, void)), t(1, t(4, t(2, t(4, void, void), t(2, t(4, void, void), t(0, void, void))), t(4, void, void)), t(1, t(0, t(2, void, void), t(3, void, void)), t(1, t(2, void, void), t(x, void, void)))))) <- true.
+ 
+    bench(isotree(T, IsoT)) <- tree1(T) & tree1_iso(IsoT).
+    bench(isotree(T, IsoT)) <- tree2(T) & tree2_iso(IsoT).
+    bench(isotree(T, NonIsoT)) <- tree3(T) & tree3_non_iso(NonIsoT).
+
+    permute([isotree(_, _) <- all]).
+*/
+    %% Benchmark 5 - Parsing natural language with a DCG.
+
+    %% Benchmark 6 - solving the mu-puzzle from GEB.
+
 /*
     theorem(_, [m, i]) <- true.
     theorem(_, []) <- fail.
     theorem(Depth, R) <- 
-        compare(>, Depth, 0) &
-        plus(Depth, -1, D) &
+        Depth > 0 &
+        D is Depth - 1 &
         theorem(D, S) &
         rules(S, R).
 
@@ -153,8 +190,17 @@
 
     rule4([H|T], [H|R]) <-
         rule4(T, R).
+
+    test_theorem([m, i, u, i, u, i, u, i, u, i, u, i, u, i, u, i, u, i, u, i, u, i, u, i, u, i, u, i, u, i, u, i, u]) <- true.
+    test_non_theorem([m, i, u, i, u, i, u, i, u, i, u, i, u, i, u, i, u, i, u, i, u, i, u, i, u, x, u, i, u, i, u, i, u]) <- true.
+
+    bench(theorem(5, T)) <- test_theorem(T).
+    bench(theorem(5, T)) <- test_non_theorem(T).
+
+    permute([rules(_, _) <- all, rule1(_, _) <- all, rule2(_, _) <- all, rule3(_, _) <- all, rule4(_, _) <- all]).
 */
-    %%Benchmark 8 - Solving the 4-queen puzzle.
+    %%Benchmark 7 - Solving the 4-queen puzzle.
+
 /*
     queens(N,Qs) <-
     	range(1,N,Ns) &
@@ -184,8 +230,14 @@
     	M < N &
     	M1 is M+1 &
     	range(M1,N,Ns).
+
+    bench(queens(4, [2, 4, 1, 3])) <- true.
+    bench(queens(4, [2, 4, 3, 1])) <- true.
+
+    permute([not_attack(_, _, _) <- [not_attack(_, _, _)], select <- all, range <- all]).
 */
-    %%Benchmark 9 - Database test for finding related regions.
+    %%Benchmark 8 - Database test for finding related regions.
+
 /*
     query([C1,D1,C2,D2]) <-
         density(C1,D1) &
@@ -253,9 +305,13 @@
     area(iran,       628)<- true.
     area(ethiopia,   350)<- true.
     area(argentina, 1080)<- true.
-*/
 
-    %% Benchmark 10 - negation test. Compare if there are any differences between member/2 and nonmember/2.
+    bench(query([ethiopia, 77, mexico, 76])) <- true.
+    bench(query([france, 246, iran, 628])) <- true.
+
+    permute([]).
+*/
+    %% Benchmark 9 - negation test. Compare if there are any differences between member/2 and nonmember/2.
 /*    
     eq(X, X) <- true.
 
@@ -267,9 +323,16 @@
     nonmember(X, [Y|Ys]) <-
         not(eq(X, Y)) &
         nonmember(X, Ys).
-*/
 
-    %     a <- true.
+    bench(member(0'e, "abcde")) <- true.
+    bench(member(0'e, "abcdd")) <- true.
+    bench(nonmember(0'e, "abcdd")) <- true.
+    bench(nonmember(0'e, "abcde")) <- true.
+
+    permute([member(_, _) <- all, nonmember(_, _) <- all]).
+*/
+  
+  %     a <- true.
     %     b <- a.
     %     c <- b.
     %     d <- c.

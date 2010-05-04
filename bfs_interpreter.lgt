@@ -52,7 +52,7 @@
         %%new body with Goals. Goal in the template is a placeholder,
         %%and is later used in add_bindings/5 to create a unifier
         %%between the old goal and the resolvent.
-        findall(state(Body, Goal),
+        bagof(state(Body, Goal),
             database::rule(Goal, Body, Goals),
             NewGoals0),
         !,

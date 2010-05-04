@@ -56,7 +56,7 @@
         write(Statistic), write(': '),
         Res is Res0/N,
         writeln(Res).
-    dispatch(Goal & Goals) :-
+    dispatch((Goal, Goals)) :-
         dispatch(Goal),
         dispatch(Goals).
     dispatch(Goal) :-

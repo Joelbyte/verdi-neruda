@@ -2,7 +2,7 @@
 
     :- public(random_tree/1).
 
-    max_depth(10).
+    max_depth(5).
 
     random_node(N) :- 
         user::random(R),
