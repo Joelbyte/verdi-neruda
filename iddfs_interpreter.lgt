@@ -26,7 +26,8 @@
     bounded_prove([not(Goal)|Goals], Bound, Remaining) :-
         Bound1 is Bound - 1,
         Bound1 >= 0,
-        (bounded_prove(Goal, Bound1, _) -> fail ; bounded_prove(Goals, Bound1, Remaining)).
+%        (bounded_prove([Goal], Bound1, _) -> fail ; bounded_prove(Goals, Bound1, Remaining)).
+        (dfs_interpreter::prove(Goal) -> fail ; bounded_prove(Goals, Bound1, Remaining)).
     bounded_prove([Goal|Goals], Bound, Remaining) :-
         Bound1 is Bound - 1,
         Bound1 >= 0,        

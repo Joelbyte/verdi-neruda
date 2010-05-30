@@ -4,7 +4,7 @@
 
     :- protected(f/4).
 
-    f(_, Length1, Length2, Cost) :-
-        Cost is Length1 - 1 + Length2.
+    f(Length1, Length2, _Depth, Cost) :-
+        Cost is Length1 + Length2 - 1.
 
 :- end_object.  

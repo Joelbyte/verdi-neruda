@@ -1,4 +1,4 @@
 :- initialization(
 	logtalk_load(
-		[library(heapp), library(heap)],
+		[library(heapp), library(heaps)],
 		[reload(skip)])).	% allow for static binding

@@ -21,6 +21,11 @@
 </relations>
 <predicates>
 <public>
+<predicate>
+<name><![CDATA[term_expansion/2]]></name>
+<scope>public</scope>
+<compilation>static</compilation>
+</predicate>
 </public>
 <protected>
 <predicate>

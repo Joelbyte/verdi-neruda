@@ -12,7 +12,7 @@
         State = state([Goal], []),
         prove1([State|X], X).
 
-    %%Version which uses append instead.    
+    %%Version which uses a queue.
     prove_clean(Goal) :-
         State = state([Goal], []),
         prove2([State]).
@@ -35,7 +35,6 @@
         ).
     prove1([Goal|Goals], Tail1) :-
         expand_goal1(Goal, Tail1, Tail),
-        %write('Expanded goals are: '), writeln(Goals),
         prove1(Goals, Tail).
 
     prove2([state([], Bindings)|_]) :-

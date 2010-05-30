@@ -11,17 +11,17 @@
     prove(Goal) :-
         %%TODO: Does not work with negated goals!
         magic::magic(Goal, MagicGoal),
-        prove([MagicGoal], [MagicGoal], FixPoint),
+        prove(Goal, [MagicGoal], [MagicGoal], FixPoint),
         satisfy_all([Goal], FixPoint, []).
 
-    prove(I, DI, FixPoint) :-
-        subsumption_iterate(I, DI, [], Pending, FixPoint0),
+    prove(Goal, I, DI, FixPoint) :-
+        subsumption_iterate(Goal, I, DI, [], Pending, FixPoint0),
         (   Pending = [] ->
                 FixPoint = FixPoint0
             ;
                 satisfy_negative_literals(Pending, FixPoint0, Satisfied),
                 subsumption_union(FixPoint0, Satisfied, FixPoint1),
-                prove(FixPoint1, Satisfied, FixPoint)
+                prove(Goal, FixPoint1, Satisfied, FixPoint)
         ).
 
     satisfy_negative_literals([], _, []).
@@ -29,23 +29,25 @@
                 (   \+ member(X, FixPoint) ->
                         Satisfied = [not(X)|Satisfied1],
                         satisfy_negative_literals(Pending, FixPoint, Satisfied1)
+
                     ;
-                        satisfy_negative_literals(Pending, FixPoint, Satisfied)
+                        satisfy_negative_literals(Pending, FixPoint, Satisfied)                        
                 ).
-                    
-    subsumption_iterate(I, DI, Pending0, Pending, Fix) :-
+    subsumption_iterate(Goal, _, DI, _, _, _) :-
+            member(Goal, DI).
+    subsumption_iterate(Goal, I, DI, Pending0, Pending, Fix) :-
 %        write('I is: '), writeln(I),
 %        write('DI is: '), writeln(DI),
 %        write('Pending0 is: '), writeln(Pending0),
     	subsumption_next(I, DI, NextI, NextDi, NextPending),
 	    (
-	        NextDi = [] ->
+	        (NextDi = [], NextPending = []) ->
 	            Fix = NextI,
                 Pending = Pending0
             ;
             append(NextPending, Pending0, Pending1),
             sort(Pending1, Pending2),
-	        subsumption_iterate(NextI, NextDi, Pending2, Pending, Fix)
+	        subsumption_iterate(Goal, NextI, NextDi, Pending2, Pending, Fix)
     	).
 
     subsumption_next(I, Di, NextI, NextDi, Pending) :-
@@ -67,7 +69,6 @@
                 (
     		        database::rule(Head, Body, negative),
 	    	        satisfy_one(Body, Di, NewBody),
-                    %writeln(rule(Head, Body, negative)),
                     satisfy_all(NewBody, I, [Pending])
                 ),
                 Pendings).

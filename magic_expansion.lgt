@@ -12,11 +12,10 @@
         rule(p, [f,g]) and performs magic transformation of clauses.']).
 
     :- protected(flatten_goals/3).
+    :- public(term_expansion/2).
 
     term_expansion(builtin(Goal), [builtin(Goal), NewPredicate]) :-
-        NewPredicate =.. [(:-), Goal, user::Goal],
-        write('NewPredicate is: '),
-        writeln(NewPredicate).
+        NewPredicate =.. [(:-), Goal, user::Goal].
 
     term_expansion((Head <- Goals), MagicClauses) :-
         findall(rule(MagicHead, MagicBody, NegOrPos),
@@ -29,7 +28,7 @@
                             NegOrPos = positive
                     )
                 ),
-                MagicClauses).
+                MagicClauses), write('MagicClauses are: '), writeln(MagicClauses).
 
     flatten_goals((G1 & G2)) -->
         !,

@@ -4,7 +4,9 @@
                     iddfs_interpreter - rule_expansion,
                     bup_interpreter - magic_expansion,
                     greedy_best_first_interpreter - heuristic_expansion,
-                    a_star_interpreter - heuristic_expansion],
+                    a_star_interpreter - heuristic_expansion,
+                    a_star_interpreter_weighted - heuristic_expansion,
+                    a_star_interpreter_weighted2 - heuristic_expansion],
     logtalk_load(library(all_loader)),
     logtalk_load(library(heap_loader)),
     logtalk_load(rule_expansion),
@@ -18,6 +20,7 @@
     logtalk_load(best_first),
     %%SWI Prolog specific.
     pairs_keys(Interpreters, Interpreters1),
+    write(Interpreters1),
     logtalk_load(Interpreters1),
     logtalk_load(shell, [hook(shell_expansion)]),
     shell(Interpreters)::init)).

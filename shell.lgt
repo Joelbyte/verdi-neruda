@@ -17,6 +17,7 @@
         repl.
     
     repl :-
+        load_database(rule_expansion),
         write('>> '),
         read(X),
         dispatch(X),
@@ -45,6 +46,26 @@
         member(Interpreter - Expander, Interpreters),
         load_database(Expander), 
         prove(Interpreter, Goal).
+    dispatch(benchmark_all(Statistic, N)) :-
+        user::open('results.txt', append, Stream),
+        this(shell(Interpreters)),
+        (   member(Interpreter - Expander, Interpreters),
+%            writeln(Stream, '##########'),
+            nl(Stream),
+            %write(Stream, 'Interpreter: '), 
+            write(Stream, Interpreter),
+            database::bench_goal(Goal),
+            %writeln(Stream, '#####'),
+            %write(Stream, 'Goal: '),
+            %writeln(Stream, Goal),
+            load_database(Expander),
+            write_benchmark(Stream, Interpreter, Statistic, N, Goal),
+            writeln('Here'),
+            fail
+        ;   writeln('Done.'), 
+            close(Stream)
+        ).
+
     dispatch(benchmark(Interpreter, Statistic, N, Goal)) :-
         this(shell(Interpreters)),
         member(Interpreter - Expander, Interpreters),
@@ -61,13 +82,13 @@
         dispatch(Goals).
     dispatch(Goal) :-
         prove(dfs_interpreter, Goal).
-
+    
     benchmark(_, _, 0, _, 0) :- !.
     benchmark(Interpreter, Statistic, N, Goal, Res) :-
         N1 is N - 1,
         benchmark(Interpreter, Statistic, N1, Goal, Res0),
         statistics(Statistic, Before),
-        Interpreter::prove(Goal), !,
+        user::call_with_depth_limit(Interpreter::prove(Goal), 1000000, _), !,
         statistics(Statistic, After),
         Res is Res0 + (After - Before).
 
@@ -76,7 +97,7 @@
         N1 is N - 1,
         benchmark_failure(Interpreter, Statistic, N1, Goal, Res0),
         statistics(Statistic, Before),
-        \+ Interpreter::prove(Goal), !,
+        call_with_depth_limit(\+ Interpreter::prove(Goal), 1000000, _), !,
         statistics(Statistic, After),
         Res is Res0 + (After - Before).
 
@@ -85,8 +106,14 @@
         writeln(Goal).
 
     load_database(Expander) :-
-        logtalk_load(database, [hook(Expander), startup_message(none)]). 
+        logtalk_load(database, [hook(Expander), report(off), plredef(silent), unknown(silent), lgtredef(silent), startup_message(none)]). 
     
+    write_statistics(Stream, _Statistic, N, Res0) :-
+        %write(Stream, Statistic), write(Stream, ': '),
+        Res1 is Res0/N,
+        Res is floor(Res1),
+        write(Stream, Res).
+
     write_help_message :-
         writeln('Available commands are:'),
         findall(Command, ::clause(dispatch(Command), _), Commands),
@@ -115,5 +142,16 @@
         write(' '),
         writeln('&'),
         write_body(Gs).
-        
+
+    write_benchmark(Stream, Interpreter, Statistic, N, Goal) :-
+        write(Stream, ' & '), 
+        (   benchmark(Interpreter, Statistic, N, Goal, Res), !
+        ;   benchmark_failure(Interpreter, Statistic, N, Goal, Res),
+            write(Stream, '(F) ')
+        ),
+        write_statistics(Stream, Statistic, N, Res).
+
+    writeln(Stream, X) :-
+        user::write(Stream, X),
+        user::nl(Stream).        
 :- end_object.
