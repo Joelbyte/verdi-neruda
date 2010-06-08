@@ -1,6 +1,6 @@
 
 :- object(dfs_interpreter,
-	implements(interpreterp)).    
+	implements(interpreterp)).
 
 	:- info([
 		version is 0.1,
@@ -12,7 +12,7 @@
 		prove_body([Goal]).
 
 	prove_body([]).
-	prove_body([not(Goal)|Goals]) :-
+	prove_body([not(Goal)|Goals]) :-	% PM: missing a cut here?
 		(prove(Goal) -> fail ; prove_body(Goals)).
 	prove_body([Goal|Goals]) :-
 		database::rule(Goal, Body, Goals),

@@ -11,14 +11,14 @@
 
 	:- protected(flatten_goals//1).
 
-    flatten_goals((G1 & G2)) -->
-        !,
-        flatten_goals(G1),
-        flatten_goals(G2).
-    flatten_goals(true) -->
-        !,
-        [].
-    flatten_goals(G) -->
-        [G].
+	flatten_goals((G1 & G2)) -->
+		!,
+		flatten_goals(G1),
+		flatten_goals(G2).
+	flatten_goals(true) -->
+		!,
+		[].
+	flatten_goals(G) -->
+		[G].
 
 :- end_category.
