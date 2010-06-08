@@ -11,7 +11,7 @@
 
 	goal_expansion(debug(Goal), Goal).
 
-	term_expansion((Goal & Goals), [Goal|List]) :-
-		phrase(::flatten_goals(Goals), List).
+	term_expansion(Term, Expansion) :-
+		^^term_expansion(Term, Expansion).
 
 :- end_object.  

@@ -6,6 +6,10 @@
 <name><![CDATA[benchmark_generators]]></name>
 <type>object</type>
 <compilation>static, context_switching_calls</compilation>
+<comment><![CDATA[.]]></comment>
+<author><![CDATA[Victor Lagerkvist]]></author>
+<version>0.1</version>
+<date>2010/3/18</date>
 </entity>
 <relations>
 </relations>

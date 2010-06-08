@@ -20,22 +20,22 @@
 <scope>public</scope>
 <compilation>static</compilation>
 <mode>
-<template><![CDATA[magicise(+term, +list, -term, -list)]]></template>
+<template><![CDATA[magicise(+term,+list,-term,-list)]]></template>
 <solutions>zero_or_one</solutions>
 </mode>
 <comment><![CDATA[Transform (Head :- Body) into a magic clause (NewHead :- NewBody).]]></comment>
-<template><![CDATA[magicise(Head, Body, NewHead, NewBody)]]></template>
+<template><![CDATA[magicise(Head,Body,NewHead,NewBody)]]></template>
 </predicate>
 <predicate>
 <name><![CDATA[magic/2]]></name>
 <scope>public</scope>
 <compilation>static</compilation>
 <mode>
-<template><![CDATA[magic(+term, -term)]]></template>
+<template><![CDATA[magic(+callable,-callable)]]></template>
 <solutions>zero_or_one</solutions>
 </mode>
 <comment><![CDATA[Prefix the predicate symbol of Old with magic_.]]></comment>
-<template><![CDATA[magic(Old, New)]]></template>
+<template><![CDATA[magic(Old,New)]]></template>
 </predicate>
 </public>
 <protected>
