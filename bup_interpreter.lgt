@@ -132,7 +132,7 @@
 	split([X|Xs], [X|Ys], Zs) :-
 		split(Xs, Zs, Ys).
 
-	subsumed(X, Y) :-
+	subsumed(X, Y) :-	% PM: the Logtalk library object "term" provides a subsumes/2 predicate
 		\+ \+ (numbervars(X, 1, _), X = Y).
 
 :- end_object.

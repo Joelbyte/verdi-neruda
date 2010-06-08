@@ -1,3 +1,4 @@
+
 :- initialization(
 	logtalk_load(
 		[library(heapp), library(heaps)],

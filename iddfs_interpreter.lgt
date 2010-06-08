@@ -9,7 +9,7 @@
 		date is 2010/03/18,
 		comment is 'Interpreter using iterative deepening depth-first search.']).
 
-	start_depth(32).	% use an object parameter instead for flexibility?
+	start_depth(32).	% PM: use an object parameter instead for flexibility?
 
 	prove(Goal) :-
 		start_depth(N),
