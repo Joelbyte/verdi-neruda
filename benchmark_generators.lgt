@@ -1,4 +1,11 @@
+
 :- object(benchmark_generators).
+
+	:- info([
+		version is 0.1,
+		author is 'Victor Lagerkvist',
+		date is 2010/03/18,
+		comment is '.']).
 
     :- public(random_tree/1).
 
