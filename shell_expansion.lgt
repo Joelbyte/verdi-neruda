@@ -1,7 +1,7 @@
 
-:- object(shell_expansion,
-	extends(rule_expansion),
-	implements(expanding)).
+:- object(shell_expansion(Mode),
+	implements(expanding),
+	extends(rule_expansion(Mode))).
 
 	:- info([
 		version is 0.1,
@@ -9,7 +9,8 @@
 		date is 2010/03/18,
 		comment is '.']).
 
-	goal_expansion(debug(_), true).
+	goal_expansion(Term, Expansion) :-
+		^^goal_expansion(Term, Expansion).
 
 	term_expansion((Goal & Goals), [Goal|List]) :-
 		phrase(::flatten_goals(Goals), List).

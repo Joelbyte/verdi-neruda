@@ -1,9 +1,10 @@
 
-:- object(heuristic_expansion,
+:- object(heuristic_expansion(Mode),
 	implements(expanding),
-	extends(rule_expansion)).
+	extends(rule_expansion(Mode))).
 
-	goal_expansion(debug(_), true).
+	goal_expansion(Term, Expansion) :-
+		^^goal_expansion(Term, Expansion).
 
 	term_expansion(builtin(Goal), (rule(Goal, T, 1, T) :- Goal)).
 

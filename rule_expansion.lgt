@@ -2,9 +2,10 @@
 :- op(1200, xfx, (<-)).
 :- op(1000, xfy, (&)).
 
-:- object(rule_expansion,
+:- object(rule_expansion(Mode),
 	implements(expanding),
-	imports(flatting)).
+	imports(flatting),
+	extends(debug_expansion(Mode))).
 
 	:- info([
 		version is 0.1,
@@ -12,7 +13,8 @@
 		date is 2010/03/18,
 		comment is 'Expands rules of the form p <- f & g to the more manageable rule(p, [f,g]).']).
 
-	goal_expansion(debug(_), true).
+	goal_expansion(Term, Expansion) :-
+		^^goal_expansion(Term, Expansion).
 
 	term_expansion(builtin(Goal), (rule(Goal, {Goal}, []))).
 

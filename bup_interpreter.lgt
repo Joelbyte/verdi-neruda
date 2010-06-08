@@ -36,7 +36,8 @@
 		debug((
 			write('I is: '), writeln(I),
 			write('DI is: '), writeln(DI),
-			write('Pending0 is: '), writeln(Pending0))),
+			write('Pending0 is: '), writeln(Pending0)
+		)),
 		subsumption_next(I, DI, NextI, NextDi, NextPending),
 		(	NextDi = [], NextPending = [] ->
 			Fix = NextI,
@@ -54,9 +55,9 @@
 	collect(I, Di, Heads, Pendings) :-
 		findall(
 			Head,
-			(database::rule(Head, Body, _),
+			(database::rule(Head, Body, PosOrNeg),
 			 satisfy_one(Body, Di, NewBody),
-			 %debug((write(rule(Head, Body, PosOrNeg)),nl)),
+			 debug((write(rule(Head, Body, PosOrNeg)),nl)),
 			 satisfy_all(NewBody, I, []),
 			 \+ subsumption_member(Head, I)),
 			Heads),
