@@ -1,12 +1,12 @@
 
 :- object(bfs_interpreter,
-          implements(interpreterp)).
+	implements(interpreterp)).
 
-    :- info([
-        version is 0.1,
-        author is 'Victor Lagerkvist',
-        date is 2010/03/18,
-        comment is 'Interpreter using a breadth-first search.']).
+	:- info([
+		version is 0.1,
+		author is 'Victor Lagerkvist',
+		date is 2010/03/18,
+		comment is 'Interpreter using a breadth-first search.']).
 
     prove(Goal) :-
         State = state([Goal], []),
@@ -41,7 +41,7 @@
         execute_bindings(Bindings).
     prove2([Goal|Goals]) :-
         expand_goal1(Goal, NewGoals, []),
-        append(Goals, NewGoals, Goals1),
+        list::append(Goals, NewGoals, Goals1),
         prove2(Goals1).
 
     expand_goal1(state([], _), Tail, Tail) :- !.
@@ -68,4 +68,5 @@
     execute_bindings([X = Y|Bs]) :-
         X = Y,
         execute_bindings(Bs).
+
 :- end_object.

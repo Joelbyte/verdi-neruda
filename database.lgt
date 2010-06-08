@@ -10,7 +10,6 @@
     :- public(builtin/1).
     :- public(bench_goal/1).
 
-    builtin(plus(_, _, _)).
     builtin(write(_)).
     builtin(nl).
     builtin(compare(_,_,_)).
@@ -25,7 +24,7 @@
     builtin(_ >= _).
     builtin(_ \== _).
 
-/*
+
     %%Benchmark 1 - naive reverse.
   append([], Ys, Ys) <- true.
   append([X|Xs], Ys, [X|Zs]) <-
@@ -47,7 +46,7 @@
 
     bench_goal(nrev("abcde", "edcba")).
     bench_goal(nrev("abcdefghij", "jihgfedcba")).
-  */
+  
     %% Benchmark 2 - transitive closure of edge/2.
 /*
     edge(1, 3) <- true.
@@ -500,4 +499,5 @@ final_state(test, [on(a, b), on(b, c), on(c, r)]).
 %bench_goal(transform(I, F, Plan)) :-
 %        initial_state(Name, I),
 %        final_state(Name, F).
+
 :- end_object.

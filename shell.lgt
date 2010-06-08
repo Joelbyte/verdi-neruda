@@ -1,19 +1,18 @@
 
 :- object(shell(_Interpreters)).
 
-    :- dynamic.
-
     :- info([
         version is 0.1,
         author is 'Victor Lagerkvist',
         date is 2010/03/23,
-        comment is 'Prolog shell for the interpreters.']).
+        comment is 'Prolog shell for the interpreters.',
+		parnames is ['Interpreters']]).
 
     :- public(init/0).
  
     init :-
-        writeln('Welcome, noble adventurer, your destiny awaits you.'),
-        writeln('Type help. for online help'),
+        write('Welcome, noble adventurer, your destiny awaits you.'), nl,
+        write('Type help. for online help'), nl,
         repl.
     
     repl :-
@@ -24,8 +23,16 @@
         (get_single_char(110) -> fail ; !),
         repl.
     repl :-
-        writeln('no'),
+        write('no'), nl,
         repl.
+
+	command(halt).
+	command(help).
+	command(listing).
+	command(programs).
+	command(prove('Interpreter', 'Goal')).
+	command(benchmark_all('Statistic', 'N')).
+	command(benchmark('Interpreter', 'Statistic', 'N', 'Goal')).
 
     dispatch(halt) :-
         halt.
@@ -39,36 +46,37 @@
                 (database::rule(Head, _, _),
                  functor(Head, Functor, Arity)),
                 Functors),
-        sort(Functors, SortedFunctors),
+        list::sort(Functors, SortedFunctors),
         meta::map(writeln, SortedFunctors).
     dispatch(prove(Interpreter, Goal)) :-
         this(shell(Interpreters)),
-        member(Interpreter - Expander, Interpreters),
+        list::member(Interpreter - Expander, Interpreters),
         load_database(Expander), 
         prove(Interpreter, Goal).
     dispatch(benchmark_all(Statistic, N)) :-
-        user::open('results.txt', append, Stream),
+        open('results.txt', append, Stream),
         this(shell(Interpreters)),
-        (   member(Interpreter - Expander, Interpreters),
-%            writeln(Stream, '##########'),
+        (   list::member(Interpreter - Expander, Interpreters),
+            debug((write(Stream, '##########'), nl)),
             nl(Stream),
-            %write(Stream, 'Interpreter: '), 
+            debug(write(Stream, 'Interpreter: ')), 
             write(Stream, Interpreter),
             database::bench_goal(Goal),
-            %writeln(Stream, '#####'),
-            %write(Stream, 'Goal: '),
-            %writeln(Stream, Goal),
+            debug((
+				write(Stream, '#####'), nl,
+            	write(Stream, 'Goal: '), nl,
+            	write(Stream, Goal), nl)),
             load_database(Expander),
             write_benchmark(Stream, Interpreter, Statistic, N, Goal),
-            writeln('Here'),
+            write('Here'), nl,
             fail
-        ;   writeln('Done.'), 
+        ;   write('Done.'), nl, 
             close(Stream)
         ).
 
     dispatch(benchmark(Interpreter, Statistic, N, Goal)) :-
         this(shell(Interpreters)),
-        member(Interpreter - Expander, Interpreters),
+        list::member(Interpreter - Expander, Interpreters),
         load_database(Expander),
         (   benchmark(Interpreter, Statistic, N, Goal, Res0)
         ;   benchmark_failure(Interpreter, Statistic, N, Goal, Res0),
@@ -76,7 +84,7 @@
         ),
         write(Statistic), write(': '),
         Res is Res0/N,
-        writeln(Res).
+        write(Res), nl.
     dispatch((Goal, Goals)) :-
         dispatch(Goal),
         dispatch(Goals).
@@ -88,7 +96,7 @@
         N1 is N - 1,
         benchmark(Interpreter, Statistic, N1, Goal, Res0),
         statistics(Statistic, Before),
-        user::call_with_depth_limit(Interpreter::prove(Goal), 1000000, _), !,
+        call_with_depth_limit(Interpreter::prove(Goal), 1000000, _), !,
         statistics(Statistic, After),
         Res is Res0 + (After - Before).
 
@@ -103,26 +111,29 @@
 
     prove(Interpreter, Goal) :-
         Interpreter::prove(Goal),
-        writeln(Goal).
+        write(Goal), nl.
 
     load_database(Expander) :-
         logtalk_load(database, [hook(Expander), report(off), plredef(silent), unknown(silent), lgtredef(silent), startup_message(none)]). 
     
-    write_statistics(Stream, _Statistic, N, Res0) :-
-        %write(Stream, Statistic), write(Stream, ': '),
+    write_statistics(Stream, Statistic, N, Res0) :-
+        debug((write(Stream, Statistic), write(Stream, ': '))),
         Res1 is Res0/N,
         Res is floor(Res1),
         write(Stream, Res).
 
     write_help_message :-
-        writeln('Available commands are:'),
-        findall(Command, ::clause(dispatch(Command), _), Commands),
-        meta::map(writeln, Commands).
-    
+        write('Available commands are:'), nl,
+		(	command(Command),
+			write(Command), nl,
+			fail
+		;	true
+		).
+
     write_rule(rule(Head, Body)) :-
         write(Head),
         write(' '),
-        writeln('<-'),
+        write('<-'), nl,
         write_body(Body),
         nl.
     
@@ -140,7 +151,7 @@
         write('   '),   
         write(G),
         write(' '),
-        writeln('&'),
+        write('&'), nl,
         write_body(Gs).
 
     write_benchmark(Stream, Interpreter, Statistic, N, Goal) :-
@@ -151,7 +162,12 @@
         ),
         write_statistics(Stream, Statistic, N, Res).
 
+    writeln(X) :-
+        write(X),
+        nl.        
+
     writeln(Stream, X) :-
-        user::write(Stream, X),
-        user::nl(Stream).        
+        write(Stream, X),
+        nl(Stream).        
+
 :- end_object.

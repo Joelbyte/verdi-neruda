@@ -1,42 +1,32 @@
+
 :- op(1200, xfx, (<-)).
 :- op(1000, xfy, (&)).
 
 :- object(magic_expansion,
-        implements(expanding)).
+	implements(expanding),
+	imports(flatting)).
 
-    :- info([
-        version is 0.1,
-        author is 'Victor Lagerkvist',
-        date is 2010/04/15,
-        comment is 'Expands rules of the form p <- f & g to the more manageable
-        rule(p, [f,g]) and performs magic transformation of clauses.']).
+	:- info([
+		version is 0.1,
+		author is 'Victor Lagerkvist',
+		date is 2010/04/15,
+		comment is 'Expands rules of the form p <- f & g to the more manageable rule(p, [f,g]) and performs magic transformation of clauses.']).
 
-    :- protected(flatten_goals/3).
-    :- public(term_expansion/2).
+	goal_expansion(debug(_), true).
 
-    term_expansion(builtin(Goal), [builtin(Goal), NewPredicate]) :-
-        NewPredicate =.. [(:-), Goal, user::Goal].
+	term_expansion(builtin(Goal), [builtin(Goal), (Goal :- {Goal})]).
 
     term_expansion((Head <- Goals), MagicClauses) :-
         findall(rule(MagicHead, MagicBody, NegOrPos),
                 (
-                    flatten_goals(Goals, Body, []),
+                    phrase(::flatten_goals(Goals), Body, []),
                     magic::magicise(Head, Body, MagicHead, MagicBody),
-                    (   member(not(_), MagicBody) ->
+                    (   list::member(not(_), MagicBody) ->
                             NegOrPos = negative
                         ;
                             NegOrPos = positive
                     )
                 ),
-                MagicClauses), write('MagicClauses are: '), writeln(MagicClauses).
+                MagicClauses), write('MagicClauses are: '), write(MagicClauses), nl.
 
-    flatten_goals((G1 & G2)) -->
-        !,
-        flatten_goals(G1),
-        flatten_goals(G2).
-    flatten_goals(true) -->
-        !,
-        [].
-    flatten_goals(G) -->
-        [G].
 :- end_object.

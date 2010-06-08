@@ -3,9 +3,9 @@
 <?xml-stylesheet type="text/xsl" href="lgtxml.xsl"?>
 <logtalk>
 <entity>
-<name><![CDATA[shell(A)]]></name>
+<name><![CDATA[shell(Interpreters)]]></name>
 <type>object</type>
-<compilation>dynamic, context_switching_calls</compilation>
+<compilation>static, context_switching_calls</compilation>
 <comment><![CDATA[Prolog shell for the interpreters.]]></comment>
 <author><![CDATA[Victor Lagerkvist]]></author>
 <version>0.1</version>
@@ -18,7 +18,7 @@
 <predicate>
 <name><![CDATA[init/0]]></name>
 <scope>public</scope>
-<compilation>dynamic</compilation>
+<compilation>static</compilation>
 </predicate>
 </public>
 <protected>

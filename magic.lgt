@@ -23,7 +23,7 @@
 	    magic(Head,X).
     magicise(Head,Body,NewHead,[X|Left]) :-
 	    magic(Head,X),
-	    append(Left,[Y|_],Body),
+	    list::append(Left,[Y|_],Body),
     	\+ database::builtin(Y),
 	    magic_head(Y,NewHead).
         
@@ -37,9 +37,9 @@
 	    nonvar(X),
 	    \+ database::builtin(X),
 	    X =.. [F | Args],
-	    name(F, Z),
-	    append("magic_", Z, W),
-	    name(G, W),
+	    atom_codes(F, Z),
+	    list::append("magic_", Z, W),
+	    atom_codes(G, W),
 	    Y =.. [G | Args].
 
 :- end_object.

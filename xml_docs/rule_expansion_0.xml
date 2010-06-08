@@ -6,8 +6,7 @@
 <name><![CDATA[rule_expansion]]></name>
 <type>object</type>
 <compilation>static, context_switching_calls</compilation>
-<comment><![CDATA[Expands rules of the form p <- f & g to the more manageable
-        rule(p, [f,g]).]]></comment>
+<comment><![CDATA[Expands rules of the form p <- f & g to the more manageable rule(p, [f,g]).]]></comment>
 <author><![CDATA[Victor Lagerkvist]]></author>
 <version>0.1</version>
 <date>2010/3/18</date>
@@ -18,16 +17,16 @@
 <scope>public</scope>
 <file><![CDATA[expanding_0]]></file>
 </implements>
+<imports>
+<name><![CDATA[flatting]]></name>
+<scope>public</scope>
+<file><![CDATA[flatting_0]]></file>
+</imports>
 </relations>
 <predicates>
 <public>
 </public>
 <protected>
-<predicate>
-<name><![CDATA[flatten_goals/3]]></name>
-<scope>protected</scope>
-<compilation>static</compilation>
-</predicate>
 </protected>
 <private>
 </private>

@@ -1,6 +1,6 @@
 
 :- object(bup_interpreter,
-            implements(interpreterp)).
+	implements(interpreterp)).
 
     :- info([
         version is 0.1,
@@ -26,7 +26,7 @@
 
     satisfy_negative_literals([], _, []).
     satisfy_negative_literals([not(X)|Pending], FixPoint, Satisfied) :-
-                (   \+ member(X, FixPoint) ->
+                (   \+ list::member(X, FixPoint) ->
                         Satisfied = [not(X)|Satisfied1],
                         satisfy_negative_literals(Pending, FixPoint, Satisfied1)
 
@@ -34,19 +34,20 @@
                         satisfy_negative_literals(Pending, FixPoint, Satisfied)                        
                 ).
     subsumption_iterate(Goal, _, DI, _, _, _) :-
-            member(Goal, DI).
+            list::member(Goal, DI).
     subsumption_iterate(Goal, I, DI, Pending0, Pending, Fix) :-
-%        write('I is: '), writeln(I),
-%        write('DI is: '), writeln(DI),
-%        write('Pending0 is: '), writeln(Pending0),
+		debug((
+			write('I is: '), writeln(I),
+			write('DI is: '), writeln(DI),
+			write('Pending0 is: '), writeln(Pending0))),
     	subsumption_next(I, DI, NextI, NextDi, NextPending),
 	    (
 	        (NextDi = [], NextPending = []) ->
 	            Fix = NextI,
                 Pending = Pending0
             ;
-            append(NextPending, Pending0, Pending1),
-            sort(Pending1, Pending2),
+            list::append(NextPending, Pending0, Pending1),
+            list::sort(Pending1, Pending2),
 	        subsumption_iterate(Goal, NextI, NextDi, Pending2, Pending, Fix)
     	).
 
@@ -60,7 +61,7 @@
                 (
     		        database::rule(Head, Body, _),
 	    	        satisfy_one(Body, Di, NewBody),
-                    %writeln(rule(Head, Body, PosOrNeg)),
+                    %debug((write(rule(Head, Body, PosOrNeg)),nl)),
                     satisfy_all(NewBody, I, []),
                     \+ subsumption_member(Head, I)
                 ),

@@ -27,11 +27,6 @@
 <compilation>dynamic</compilation>
 </predicate>
 <predicate>
-<name><![CDATA[permute/1]]></name>
-<scope>public</scope>
-<compilation>dynamic</compilation>
-</predicate>
-<predicate>
 <name><![CDATA[builtin/1]]></name>
 <scope>public</scope>
 <compilation>dynamic</compilation>

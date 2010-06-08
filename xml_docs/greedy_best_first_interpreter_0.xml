@@ -18,11 +18,6 @@
 <public>
 </public>
 <protected>
-<predicate>
-<name><![CDATA[f/4]]></name>
-<scope>protected</scope>
-<compilation>static</compilation>
-</predicate>
 </protected>
 <private>
 </private>

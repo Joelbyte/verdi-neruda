@@ -5,7 +5,7 @@
     max_depth(5).
 
     random_node(N) :- 
-        user::random(R),
+        random::random(R),
         max_depth(D),
         N is floor(R * D).
     

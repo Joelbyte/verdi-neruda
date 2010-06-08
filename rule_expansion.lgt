@@ -1,30 +1,22 @@
+
 :- op(1200, xfx, (<-)).
 :- op(1000, xfy, (&)).
 
 :- object(rule_expansion,
-    implements(expanding)).        
+    implements(expanding),
+	imports(flatting)).
 
     :- info([
         version is 0.1,
         author is 'Victor Lagerkvist',
         date is 2010/03/18,
-        comment is 'Expands rules of the form p <- f & g to the more manageable
-        rule(p, [f,g]).']).
+        comment is 'Expands rules of the form p <- f & g to the more manageable rule(p, [f,g]).']).
 
-    :- protected(flatten_goals/3).
+	goal_expansion(debug(_), true).
 
-    term_expansion(builtin(Goal), (rule(Goal, T, T) :- Goal)).
+    term_expansion(builtin(Goal), (rule(Goal, {Goal}, []))).
 
     term_expansion((Head <- Goals), rule(Head, List, Tail)) :-
-        flatten_goals(Goals, List, Tail).
+        phrase(::flatten_goals(Goals), List, Tail).
 
-    flatten_goals((G1 & G2)) -->
-        !,
-        flatten_goals(G1),
-        flatten_goals(G2).
-    flatten_goals(true) -->
-        !,
-        [].
-    flatten_goals(G) -->
-        [G].
 :- end_object.

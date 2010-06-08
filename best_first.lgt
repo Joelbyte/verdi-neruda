@@ -1,6 +1,8 @@
 
 :- category(best_first,
-            implements(interpreterp)).
+	implements(interpreterp)).
+
+	:- protected(f/4).
 
     prove(Goal) :-
         minheap::as_heap([1 - state([Goal], 1, 0, [])], Heap),
@@ -53,4 +55,5 @@
     execute_bindings([X = Y|Bs]) :-
         X = Y,
         execute_bindings(Bs).
+
 :- end_category.

@@ -3,21 +3,25 @@
 <?xml-stylesheet type="text/xsl" href="lgtxml.xsl"?>
 <logtalk>
 <entity>
-<name><![CDATA[a_star_interpreter]]></name>
-<type>object</type>
+<name><![CDATA[flatting]]></name>
+<type>category</type>
 <compilation>static, context_switching_calls</compilation>
+<comment><![CDATA[Flattens conjunction of goals with the form f & g into a list [f,g].]]></comment>
+<author><![CDATA[Victor Lagerkvist]]></author>
+<version>0.1</version>
+<date>2010/4/15</date>
 </entity>
 <relations>
-<imports>
-<name><![CDATA[best_first]]></name>
-<scope>public</scope>
-<file><![CDATA[best_first_0]]></file>
-</imports>
 </relations>
 <predicates>
 <public>
 </public>
 <protected>
+<predicate>
+<name><![CDATA[flatten_goals//1]]></name>
+<scope>protected</scope>
+<compilation>static</compilation>
+</predicate>
 </protected>
 <private>
 </private>

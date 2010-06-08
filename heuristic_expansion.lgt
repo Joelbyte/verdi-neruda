@@ -1,13 +1,15 @@
 
 :- object(heuristic_expansion,
-          extends(rule_expansion),
-          implements(expanding)).
+	implements(expanding),
+	extends(rule_expansion)).
 
-    term_expansion(builtin(Goal), (rule(Goal, T, 1, T) :- Goal)).
+	goal_expansion(debug(_), true).
 
-    term_expansion((Head <- Goals), rule(Head, List, Length, Tail)) :-
-        ::flatten_goals(Goals, List0, []),
-        length(List0, Length),
-        append(List0, Tail, List).
+	term_expansion(builtin(Goal), (rule(Goal, T, 1, T) :- Goal)).
+
+	term_expansion((Head <- Goals), rule(Head, List, Length, Tail)) :-
+		phrase(::flatten_goals(Goals), List0),
+		list::length(List0, Length),
+		list::append(List0, Tail, List).
 
 :- end_object.  

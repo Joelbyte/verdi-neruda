@@ -1,13 +1,13 @@
 %%TODO: Only allow a new bound if some progress has been made.
 
 :- object(iddfs_interpreter,
-            implements(interpreterp)).    
+	implements(interpreterp)).    
 
-    :- info([
-        version is 0.1,
-        author is 'Victor Lagerkvist',
-        date is 2010/03/18,
-        comment is 'Interpreter using iterative deepening depth-first search.']).
+	:- info([
+		version is 0.1,
+		author is 'Victor Lagerkvist',
+		date is 2010/03/18,
+		comment is 'Interpreter using iterative deepening depth-first search.']).
 
     start_depth(32).
 
