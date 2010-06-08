@@ -16,17 +16,19 @@
 
 	term_expansion(builtin(Goal), [builtin(Goal), (Goal :- {Goal})]).
 
-    term_expansion((Head <- Goals), MagicClauses) :-
-        findall(rule(MagicHead, MagicBody, NegOrPos),
-                (
-                    phrase(::flatten_goals(Goals), Body, []),
-                    magic::magicise(Head, Body, MagicHead, MagicBody),
-                    (   list::member(not(_), MagicBody) ->
-                            NegOrPos = negative
-                        ;
-                            NegOrPos = positive
-                    )
-                ),
-                MagicClauses), write('MagicClauses are: '), write(MagicClauses), nl.
+	term_expansion((Head <- Goals), MagicClauses) :-
+		findall(
+			rule(MagicHead, MagicBody, NegOrPos),
+			magic_clause(MagicHead, MagicBody, NegOrPos),
+			MagicClauses).
+%	debug((write('MagicClauses are: '), write(MagicClauses), nl)).
+
+	magic_clause(MagicHead, MagicBody, NegOrPos) :-
+		phrase(::flatten_goals(Goals), Body, []),
+		magic::magicise(Head, Body, MagicHead, MagicBody),
+		(   list::member(not(_), MagicBody) ->
+			NegOrPos = negative
+		;	NegOrPos = positive
+		).
 
 :- end_object.
