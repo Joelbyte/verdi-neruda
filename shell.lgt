@@ -65,7 +65,8 @@
 			debug((
 				write(Stream, '#####'), nl,
 				write(Stream, 'Goal: '), nl,
-				write(Stream, Goal), nl)),
+				write(Stream, Goal), nl
+			)),
 			load_database(Expander),
 			write_benchmark(Stream, Interpreter, Statistic, N, Goal),
 			write('Here'), nl,
