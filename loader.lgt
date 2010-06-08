@@ -23,6 +23,6 @@
 	logtalk_load(best_first),
 	pairs::keys(Interpreters, Interpreters1),
 	write(Interpreters1),
-	logtalk_load(Interpreters1),
+	logtalk_load(Interpreters1, [hook(debug_expansion(production))]),
 	logtalk_load(shell, [hook(shell_expansion(production))]),
 	shell(Interpreters)::init)).
