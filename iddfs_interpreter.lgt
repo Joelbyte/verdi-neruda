@@ -1,19 +1,18 @@
 %%TODO: Only allow a new bound if some progress has been made.
 
-:- object(iddfs_interpreter,
+:- object(iddfs_interpreter(_Increment),
 	implements(interpreterp)).	
 
 	:- info([
 		version is 0.1,
 		author is 'Victor Lagerkvist',
 		date is 2010/03/18,
-		comment is 'Interpreter using iterative deepening depth-first search.']).
-
-	start_depth(32).	% PM: use an object parameter instead for flexibility?
+		comment is 'Interpreter using iterative deepening depth-first search. Based on source code from The Craft of Prolog, by Richard O\'Keefe.',
+        parnames is ['Increment']]).
 
 	prove(Goal) :-
-		start_depth(N),
-		prove([Goal], N, N).
+        parameter(1, Increment),
+		prove([Goal], 1, Increment).
 
 	prove(Goals, Bound, Increment) :-
 		bounded_prove(Goals, Bound, Remaining),

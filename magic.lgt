@@ -38,9 +38,6 @@
 		\+ database::builtin(X),
 		X =.. [F | Args],
 		atom_concat(magic_, F, G),
-%		atom_codes(F, Z),				% PM: am I missing something here?
-%		list::append("magic_", Z, W),
-%		atom_codes(G, W),
 		Y =.. [G | Args].
 
 :- end_object.

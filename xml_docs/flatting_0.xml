@@ -6,7 +6,7 @@
 <name><![CDATA[flatting]]></name>
 <type>category</type>
 <compilation>static, context_switching_calls</compilation>
-<comment><![CDATA[Flattens conjunction of goals with the form f & g into a list [f,g].]]></comment>
+<comment><![CDATA[Flattens conjunction of goals with the form f & g into a list [f,g]. Based on source code from The Craft of Prolog, by Richard O'Keefe]]></comment>
 <author><![CDATA[Victor Lagerkvist]]></author>
 <version>0.1</version>
 <date>2010/4/15</date>

@@ -24,8 +24,7 @@
 				prove_branch(Heap1)
 			;	Length1 is Length - 1,
 				Depth1 is Depth + 1,
-				this(Caller),
-				Caller::f(Length, 0, Depth1, Cost1),
+				::f(Length, 0, Depth1, Cost1),
 				minheap::insert(Cost1, state(Gs, Length1, Depth1, Bindings), Heap1, Heap2),
 				prove_branch(Heap2)
 			)

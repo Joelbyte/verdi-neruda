@@ -1,4 +1,8 @@
-
+%%TODO: Rewrite it using Logtalk's queue instead. It would
+%%make it slightly slower but more readable and similiar to
+%%the best-first framework. When this is done prove2/1, which
+%%is only included since it is easier to understand than prove1/1,
+%%can be removed.
 :- object(bfs_interpreter,
 	implements(interpreterp)).
 
@@ -27,12 +31,13 @@
 		(Tail1 == Tail2 -> ! ; true),
 		execute_bindings(Bindings).
 	prove1([state([not(Goal)|Goals], Bindings)|Tail1], Tail2) :-
-		(prove(Goal) ->
-		   fail
-		 ; State = state(Goals, Bindings),
-		   Tail2 = [State|Tail],
-		   prove1(Tail1, Tail)
-		).
+        !, %%TODO: Perhaps rewrite it as a if-then-else instead to avoid the cut.
+        (   prove(Goal) ->
+            prove1(Tail1, Tail2) %The whole branch failed. Move on!
+        ;   State = state(Goals, Bindings),
+            Tail2 = [State|Tail], %Otherwise append the new state last in the list
+            prove1(Tail1, Tail)   %and continue with the rest of the branches.
+        ).
 	prove1([Goal|Goals], Tail1) :-
 		expand_goal1(Goal, Tail1, Tail),
 		prove1(Goals, Tail).

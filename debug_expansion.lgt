@@ -4,7 +4,7 @@
 
 	:- info([
 		version is 0.1,
-		author is 'Victor Lagerkvist',
+		author is 'Paulo Moura',
 		date is 2010/04/15,
 		comment is 'Expands debug/1 calls. The parameter Mode can be either the atom "debug" or "production".',
 		parnames is ['Mode']]).

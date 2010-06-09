@@ -5,7 +5,7 @@
 		version is 0.1,
 		author is 'Victor Lagerkvist',
 		date is 2010/03/18,
-		comment is '.']).
+		comment is 'Generates random data structures for use in benchmarks.']).
 
 	:- public(random_tree/1).
 

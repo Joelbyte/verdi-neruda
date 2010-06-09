@@ -11,8 +11,7 @@
 	prove(Goal) :-
 		%%TODO: Does not work with negated goals!
 		magic::magic(Goal, MagicGoal),
-		prove(Goal, [MagicGoal], [MagicGoal], FixPoint),
-		satisfy_all([Goal], FixPoint, []).
+		prove(Goal, [MagicGoal], [MagicGoal], FixPoint).
 
 	prove(Goal, I, DI, FixPoint) :-
 		subsumption_iterate(Goal, I, DI, [], Pending, FixPoint0),
@@ -30,6 +29,7 @@
 			satisfy_negative_literals(Pending, FixPoint, Satisfied1)
 		;	satisfy_negative_literals(Pending, FixPoint, Satisfied)						
 		).
+
 	subsumption_iterate(Goal, _, DI, _, _, _) :-
 		list::member(Goal, DI).
 	subsumption_iterate(Goal, I, DI, Pending0, Pending, Fix) :-
@@ -132,7 +132,8 @@
 	split([X|Xs], [X|Ys], Zs) :-
 		split(Xs, Zs, Ys).
 
-	subsumed(X, Y) :-	% PM: the Logtalk library object "term" provides a subsumes/2 predicate
-		\+ \+ (numbervars(X, 1, _), X = Y).
+    %%The double negation is a dirty hack to avoid binding any variables.
+    subsumed(X, Y) :-
+        \+ \+ term::subsumes(X, Y).    
 
 :- end_object.
