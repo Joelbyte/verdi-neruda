@@ -8,10 +8,10 @@
 		author is 'Victor Lagerkvist',
 		date is 2010/03/18,
 		comment is 'Interpreter using iterative deepening depth-first search. Based on source code from The Craft of Prolog, by Richard O\'Keefe.',
-        parnames is ['Increment']]).
+		parnames is ['Increment']]).
 
 	prove(Goal) :-
-        parameter(1, Increment),
+		parameter(1, Increment),
 		prove([Goal], 1, Increment).
 
 	prove(Goals, Bound, Increment) :-

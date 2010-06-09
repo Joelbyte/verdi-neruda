@@ -28,7 +28,7 @@
 	magic_clause(Head, Goals, MagicHead, MagicBody, NegOrPos) :-
 		phrase(::flatten_goals(Goals), Body, []),
 		magic::magicise(Head, Body, MagicHead, MagicBody),
-		(   list::member(not(_), MagicBody) ->
+		(	list::member(not(_), MagicBody) ->
 			NegOrPos = negative
 		;	NegOrPos = positive
 		).

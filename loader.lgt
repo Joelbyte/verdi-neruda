@@ -1,8 +1,8 @@
 load_interpreters([]).
 load_interpreters([I|Is]) :-
-    functor(I, Name, _),
-    logtalk_load(Name, [hook(debug_expansion(production))]),
-    load_interpreters(Is).
+	functor(I, Name, _),
+	logtalk_load(Name, [hook(debug_expansion(production))]),
+	load_interpreters(Is).
 
 %%TODO: Once Inc in iddfs_interpreter is used it does not seem possible to use
 %%another value later on. Use create_object/2 instead?
@@ -30,6 +30,6 @@ load_interpreters([I|Is]) :-
 	logtalk_load(best_first),
 	pairs::keys(Interpreters, Interpreters1),
 	write(Interpreters1),
-    load_interpreters(Interpreters1),
+	load_interpreters(Interpreters1),
 	logtalk_load(shell, [hook(debug_expansion(production))]),
 	shell(Interpreters)::init)).

@@ -15,7 +15,7 @@
 
 	prove(Goal, I, DI, FixPoint) :-
 		subsumption_iterate(Goal, I, DI, [], Pending, FixPoint0),
-		(   Pending = [] ->
+		(	Pending = [] ->
 			FixPoint = FixPoint0
 		;	satisfy_negative_literals(Pending, FixPoint0, Satisfied),
 			subsumption_union(FixPoint0, Satisfied, FixPoint1),
@@ -24,7 +24,7 @@
 
 	satisfy_negative_literals([], _, []).
 	satisfy_negative_literals([not(X)|Pending], FixPoint, Satisfied) :-
-		(   \+ list::member(X, FixPoint) ->
+		(	\+ list::member(X, FixPoint) ->
 			Satisfied = [not(X)|Satisfied1],
 			satisfy_negative_literals(Pending, FixPoint, Satisfied1)
 		;	satisfy_negative_literals(Pending, FixPoint, Satisfied)						
@@ -107,7 +107,7 @@
 	satisfy_all([], _, []).
 	satisfy_all([not(X)|Xs], Int, Pending) :-
 		!,
-		(   satisfy_atom(Int, not(X)) ->
+		(	satisfy_atom(Int, not(X)) ->
 			satisfy_all(Xs, Int, Pending)
 		;	satisfy_atom(Int, X) -> 
 			fail
@@ -132,8 +132,8 @@
 	split([X|Xs], [X|Ys], Zs) :-
 		split(Xs, Zs, Ys).
 
-    %%The double negation is a dirty hack to avoid binding any variables.
-    subsumed(X, Y) :-
-        \+ \+ term::subsumes(X, Y).    
+	%%The double negation is a dirty hack to avoid binding any variables.
+	subsumed(X, Y) :-
+		\+ \+ term::subsumes(X, Y).	   
 
 :- end_object.

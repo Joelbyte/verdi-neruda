@@ -56,7 +56,7 @@
 	dispatch(benchmark_all(Statistic, N)) :-
 		open('results.txt', append, Stream),
 		this(shell(Interpreters)),
-		(   list::member(Interpreter - Expander, Interpreters),
+		(	list::member(Interpreter - Expander, Interpreters),
 			debug((write(Stream, '##########'), nl)),
 			nl(Stream),
 			debug(write(Stream, 'Interpreter: ')), 
@@ -71,7 +71,7 @@
 			write_benchmark(Stream, Interpreter, Statistic, N, Goal),
 			write('Here'), nl,
 			fail
-		;   write('Done.'), nl, 
+		;	write('Done.'), nl, 
 			close(Stream)
 		).
 
@@ -79,8 +79,8 @@
 		this(shell(Interpreters)),
 		list::member(Interpreter - Expander, Interpreters),
 		load_database(Expander),
-		(   benchmark(Interpreter, Statistic, N, Goal, Res0)
-		;   benchmark_failure(Interpreter, Statistic, N, Goal, Res0),
+		(	benchmark(Interpreter, Statistic, N, Goal, Res0)
+		;	benchmark_failure(Interpreter, Statistic, N, Goal, Res0),
 			write('(failure) ')
 		),
 		write(Statistic), write(': '),
@@ -140,16 +140,16 @@
 	
 	write_body([G]) :-
 		!,
-		write('   '),
+		write('	  '),
 		write(G),
 		write('.').
 	write_body([]) :-
 		!,
-		write('   '),
+		write('	  '),
 		write(true),
 		write('.').
 	write_body([G|Gs]) :-
-		write('   '),   
+		write('	  '),	
 		write(G),
 		write(' '),
 		write('&'), nl,
@@ -157,8 +157,8 @@
 
 	write_benchmark(Stream, Interpreter, Statistic, N, Goal) :-
 		write(Stream, ' & '), 
-		(   benchmark(Interpreter, Statistic, N, Goal, Res), !
-		;   benchmark_failure(Interpreter, Statistic, N, Goal, Res),
+		(	benchmark(Interpreter, Statistic, N, Goal, Res), !
+		;	benchmark_failure(Interpreter, Statistic, N, Goal, Res),
 			write(Stream, '(F) ')
 		),
 		write_statistics(Stream, Statistic, N, Res).

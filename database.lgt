@@ -28,7 +28,7 @@
 	%%Benchmark 1 - naive reverse.
 	append([], Ys, Ys) <- true.
 	append([X|Xs], Ys, [X|Zs]) <-
-  		append(Xs, Ys, Zs).
+		append(Xs, Ys, Zs).
   
 	  nrev([], []) <- true.
 	  nrev([X|Xs], Reversed) <-
@@ -369,26 +369,26 @@
 	area(india,	 1139)<- true.
 	area(ussr,	  8708)<- true.
 	area(usa,	   3609)<- true.
-	area(indonesia,  570)<- true.
+	area(indonesia,	 570)<- true.
 	area(japan,	  148)<- true.
 	area(brazil,	3288)<- true.
 	area(bangladesh,  55)<- true.
-	area(pakistan,   311)<- true.
-	area(w_germany,   96)<- true.
+	area(pakistan,	 311)<- true.
+	area(w_germany,	  96)<- true.
 	area(nigeria,	373)<- true.
 	area(mexico,	 764)<- true.
 	area(uk,		  86)<- true.
 	area(italy,	  116)<- true.
 	area(france,	 213)<- true.
 	area(philippines, 90)<- true.
-	area(thailand,   200)<- true.
+	area(thailand,	 200)<- true.
 	area(turkey,	 296)<- true.
 	area(egypt,	  386)<- true.
 	area(spain,	  190)<- true.
 	area(poland,	 121)<- true.
 	area(s_korea,	 37)<- true.
 	area(iran,	   628)<- true.
-	area(ethiopia,   350)<- true.
+	area(ethiopia,	 350)<- true.
 	area(argentina, 1080)<- true.
 
 	bench_goal(query([ethiopia, 77, mexico, 76])).
@@ -447,10 +447,10 @@ transform(State1,State2,Visited,[Action|Actions]) <-
    transform(State,State2,[State|Visited],Actions).
 
 %transform(State1,State2,Visited,[Action|Actions]) <-
-%   choose_action(Action,State1, State2) &
-%   update(Action,State1,State) &
-%   not(member(State,Visited)) &
-%   transform(State,State2,[State|Visited],Actions).
+%	choose_action(Action,State1, State2) &
+%	update(Action,State1,State) &
+%	not(member(State,Visited)) &
+%	transform(State,State2,[State|Visited],Actions).
 %
 legal_action(to_place(Block,Y,Place),State) <- 
    on(Block,Y,State) &
