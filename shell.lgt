@@ -50,8 +50,10 @@
 		meta::map(writeln, SortedFunctors).
 	dispatch(prove(Interpreter, Goal)) :-
 		this(shell(Interpreters)),
-		list::member(Interpreter - Expander, Interpreters),
-		load_database(Expander), 
+		functor(Interpreter, Functor, Arity),			% necessary for the parametric
+		functor(InterpreterTemplate, Functor, Arity),	% interpreters
+		list::member(InterpreterTemplate - Expander, Interpreters),
+		load_database(Expander),
 		prove(Interpreter, Goal).
 	dispatch(benchmark_all(Statistic, N)) :-
 		open('results.txt', append, Stream),
