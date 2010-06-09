@@ -16,7 +16,7 @@
 		repl.
 	
 	repl :-
-		load_database(rule_expansion),
+		load_database(rule_expansion(production)),
 		write('>> '),
 		read(X),
 		dispatch(X),
@@ -39,12 +39,12 @@
 	dispatch(help) :-
 		write_help_message.
 	dispatch(listing) :-
-		findall(rule(Head, Body), database::rule(Head, Body, _), Rules),
+		findall(rule(Head, Body), database::rule(Head, Body), Rules),
 		meta::map(write_rule, Rules).
 	dispatch(programs) :-
 		findall(
 			Functor/Arity,
-			(database::rule(Head, _, _), functor(Head, Functor, Arity)),
+			(database::rule(Head, _), functor(Head, Functor, Arity)),
 			Functors),
 		list::sort(Functors, SortedFunctors),
 		meta::map(writeln, SortedFunctors).
@@ -139,7 +139,10 @@
 		write('<-'), nl,
 		write_body(Body),
 		nl.
-	
+
+	write_body({G}) :-
+		write('	  '),
+		write(builtin).
 	write_body([G]) :-
 		!,
 		write('	  '),

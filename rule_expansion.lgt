@@ -16,9 +16,11 @@
 	goal_expansion(Term, Expansion) :-
 		^^goal_expansion(Term, Expansion).
 
-	term_expansion(builtin(Goal), (rule(Goal, {Goal}, []))).
+	term_expansion(builtin(Goal), rule(Goal, {Goal}, [])).
 
 	term_expansion((Head <- Goals), rule(Head, List, Tail)) :-
 		phrase(::flatten_goals(Goals), List, Tail).
+
+	term_expansion((:- end_object), [(rule(Head,Body) :- rule(Head,Body,_)), (:- end_object)]).
 
 :- end_object.

@@ -38,7 +38,7 @@
 		Depth is Depth0 + 1,
 		bagof(Cost - state(Body, Length, Depth, Goal),
 			  Depth0^Length1^Length2^(
-				database::rule(Goal, Body, Length2, Goals),
+				rule(Goal, Body, Length2, Goals),
 				Length is Length1 + Length2 - 1,
 				::f(Length1, Length2, Depth, Cost)
 			  ),
@@ -46,6 +46,12 @@
 		!,
 		add_bindings(NewPairs0, Goal, Bindings, Pairs).
 	expand_state(_, _, []).
+
+	rule(Goal, Tail, 1, Tail) :-
+		database::rule(Goal, {Goal}, 1, []), !,
+		call(Goal).
+	rule(Goal, Body, Length, Goals) :-
+		database::rule(Goal, Body, Length, Goals).
 
 	add_bindings([], _, _, []).
 	add_bindings([Cost - State0|States0], Goal, Bindings, [Cost - State|States]) :-

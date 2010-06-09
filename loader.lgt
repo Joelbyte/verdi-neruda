@@ -4,8 +4,6 @@ load_interpreters([I|Is]) :-
 	logtalk_load(Name, [hook(debug_expansion(production))]),
 	load_interpreters(Is).
 
-%%TODO: Once Inc in iddfs_interpreter is used it does not seem possible to use
-%%another value later on. Use create_object/2 instead?
 :- initialization((
 	Interpreters = [dfs_interpreter - rule_expansion(production),
 					bfs_interpreter - rule_expansion(production),

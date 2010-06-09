@@ -58,7 +58,7 @@
 		%%between the old goal and the resolvent.
 		bagof(
 			state(Body, Goal),
-			database::rule(Goal, Body, Goals),
+			rule(Goal, Body, Goals),
 			NewGoals0),
 		!,
 		add_bindings(NewGoals0, Goal, Bindings, NewGoals, Tail).
@@ -74,5 +74,11 @@
 	execute_bindings([X = Y|Bs]) :-
 		X = Y,
 		execute_bindings(Bs).
+
+	rule(Head, T, T) :-
+		database::rule(Head, {Head}, []), !,
+		call(Head).
+	rule(Head, Body, Tail) :-
+		database::rule(Head, Body, Tail).
 
 :- end_object.

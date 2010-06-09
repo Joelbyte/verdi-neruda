@@ -18,14 +18,14 @@
 				fail
 			;	prove_body(Goals)
 			)
-		;	database::rule(Goal, Body, Goals),
+		;	rule(Goal, Body, Goals),
 			prove_body(Body)
 		).
-			
-	% prove_body([not(Goal)|Goals]) :-	% PM: missing a cut here?
-	%	(prove(Goal) -> fail ; prove_body(Goals)).
-	% prove_body([Goal|Goals]) :-
-	%	database::rule(Goal, Body, Goals),
-	%	prove_body(Body).
+
+	rule(Head, T, T) :-
+		database::rule(Head, {Head}, []), !,
+		call(Head).
+	rule(Head, Body, Tail) :-
+		database::rule(Head, Body, Tail).
 
 :- end_object.
