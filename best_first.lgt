@@ -6,7 +6,7 @@
 		version is 0.1,
 		author is 'Victor Lagerkvist',
 		date is 2010/03/18,
-		comment is 'Interpreter using iterative deepening depth-first search.']).
+		comment is 'Best-first framework for general logic programs.']).
 
 	:- protected(f/4).
 
@@ -40,8 +40,7 @@
 			  Depth0^Length1^Length2^(
 				database::rule(Goal, Body, Length2, Goals),
 				Length is Length1 + Length2 - 1,
-				this(Caller),
-				Caller::f(Length1, Length2, Depth, Cost)
+				::f(Length1, Length2, Depth, Cost)
 			  ),
 			NewPairs0),
 		!,
