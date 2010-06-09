@@ -26,13 +26,13 @@
 		write('no'), nl,
 		repl.
 
-	command(halt).
-	command(help).
-	command(listing).
-	command(programs).
-	command(prove('Interpreter', 'Goal')).
-	command(benchmark_all('Statistic', 'N')).
-	command(benchmark('Interpreter', 'Statistic', 'N', 'Goal')).
+	command(halt, 'Shuts down the Prolog system.').
+	command(help, 'Prints this message.').
+	command(listing, 'Prints the currently loaded rules.').
+	command(programs, 'Prints the currently loaded predicates.').
+	command(prove('Interpreter', 'Goal'), 'Proves Goal with Interpreter.').
+	command(benchmark_all('Statistic', 'N'), 'Benchmarks all interpreters with Statistic N times. Benchmarks are stored in the database as bench_goal/1 facts or rules.').
+	command(benchmark('Interpreter', 'Statistic', 'N', 'Goal'), 'Benchmarks Interpreter with respect to Statistic, N and Goal.').
 
 	dispatch(halt) :-
 		halt.
@@ -127,8 +127,8 @@
 
 	write_help_message :-
 		write('Available commands are:'), nl,
-		(	command(Command),
-			write(Command), nl,
+		(	command(Command, Description),
+			write(Command), write(' : '), write(Description), nl,
 			fail
 		;	true
 		).

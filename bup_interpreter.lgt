@@ -8,10 +8,11 @@
 		date is 2010/04/14,
 		comment is 'Semi-naive bottom-up interpreter. Magic transformation is realized through an expansion hook.']).
 
+    %%Does not work with negated goals! This is a minor issue since these goals
+	%%can be rewritten as rules instead.
 	prove(Goal) :-
-		%%TODO: Does not work with negated goals!
 		magic::magic(Goal, MagicGoal),
-		prove(Goal, [MagicGoal], [MagicGoal], FixPoint).
+		prove(Goal, [MagicGoal], [MagicGoal], _FixPoint).
 
 	prove(Goal, I, DI, FixPoint) :-
 		subsumption_iterate(Goal, I, DI, [], Pending, FixPoint0),
