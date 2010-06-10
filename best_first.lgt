@@ -25,6 +25,7 @@
 			;	Length1 is Length - 1,
 				Depth1 is Depth + 1,
 				::f(Length, 0, Depth1, Cost1),
+				counter::increment,
 				minheap::insert(Cost1, state(Gs, Length1, Depth1, Bindings), Heap1, Heap2),
 				prove_branch(Heap2)
 			)
@@ -36,11 +37,18 @@
 	expand_state(_, state([], 0, _, _), []) :- !.
 	expand_state(_Cost0, state([Goal|Goals], Length1, Depth0, Bindings), Pairs) :-
 		Depth is Depth0 + 1,
+		Counter = counter,
 		bagof(Cost - state(Body, Length, Depth, Goal),
 			  Depth0^Length1^Length2^(
 				rule(Goal, Body, Length2, Goals),
 				Length is Length1 + Length2 - 1,
-				::f(Length1, Length2, Depth, Cost)
+				%%When counter::increment is used instead only the first solution is
+				%%found. The bug must be located!
+				Counter::increment,
+				%%If ::f(...) is used instead only the first solution is found. An 
+				%%incompatibility between bagof/3 and ::f?
+				this(Caller),
+				Caller::f(Length1, Length2, Depth, Cost)
 			  ),
 			NewPairs0),
 		!,

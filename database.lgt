@@ -24,6 +24,13 @@
 	builtin(_ >= _).
 	builtin(_ \== _).
 
+	%%Used for testing inferences, remove later.
+	f <- not(c).
+	f <- b.
+
+	b <- a.
+	a <- true.
+
 	%%Benchmark 1 - naive reverse.
 	append([], Ys, Ys) <- true.
 	append([X|Xs], Ys, [X|Zs]) <-
