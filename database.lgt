@@ -24,7 +24,6 @@
 	builtin(_ >= _).
 	builtin(_ \== _).
 
-
 	%%Benchmark 1 - naive reverse.
 	append([], Ys, Ys) <- true.
 	append([X|Xs], Ys, [X|Zs]) <-

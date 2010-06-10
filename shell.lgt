@@ -140,7 +140,7 @@
 		write_body(Body),
 		nl.
 
-	write_body({G}) :-
+	write_body({_}) :-
 		write('	  '),
 		write(builtin).
 	write_body([G]) :-

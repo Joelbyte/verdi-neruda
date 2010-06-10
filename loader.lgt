@@ -15,6 +15,7 @@ load_interpreters([I|Is]) :-
 					a_star_interpreter_weighted2 - heuristic_expansion(production)],
 	logtalk_load(library(all_loader)),
 	logtalk_load(heap_loader),
+	logtalk_load(counter_loader),
 	logtalk_load(magic),
 	logtalk_load(flatting),
 	logtalk_load(debug_expansion),

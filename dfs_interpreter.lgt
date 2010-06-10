@@ -16,9 +16,11 @@
 		(	Goal = not(G) ->
 			(	prove(G) ->
 				fail
-			;	prove_body(Goals)
+			;	counter::increment,
+				prove_body(Goals)
 			)
 		;	rule(Goal, Body, Goals),
+			counter::increment,
 			prove_body(Body)
 		).
 
