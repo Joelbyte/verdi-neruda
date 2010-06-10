@@ -3,7 +3,7 @@
 
 	:- info([
 		version is 0.1,
-		author is 'Victor Lagerkvist',
+		author is 'Victor Lagerkvist and Paulo Moura',
 		date is 2010/03/23,
 		comment is 'Prolog shell for the interpreters.',
 		parnames is ['Interpreters']]).
@@ -76,7 +76,6 @@
 		;	write('Done.'), nl, 
 			close(Stream)
 		).
-
 	dispatch(benchmark(Interpreter, Statistic, N, Goal)) :-
 		this(shell(Interpreters)),
 		list::member(Interpreter - Expander, Interpreters),

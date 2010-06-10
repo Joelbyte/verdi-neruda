@@ -16,18 +16,20 @@
 		(	Goal = not(G) ->
 			(	prove(G) ->
 				fail
-			;	counter::increment,
+			;	counter::increment, %Inference counting.
 				prove_body(Goals)
 			)
 		;	rule(Goal, Body, Goals),
-			counter::increment,
+			counter::increment, %Inference counting.
 			prove_body(Body)
 		).
 
-	rule(Head, T, T) :-
-		database::rule(Head, {Head}, []), !,
-		call(Head).
 	rule(Head, Body, Tail) :-
-		database::rule(Head, Body, Tail).
+		database::rule(Head, Body0, Tail),
+		(	Body0 = {Head} -> 
+			call(Head), %Builtin.
+			Body = Tail
+		;	Body = Body0
+		).	
 
 :- end_object.

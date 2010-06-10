@@ -23,14 +23,29 @@
 
 	bounded_prove([], Remaining, Remaining).
 	bounded_prove([not(Goal)|Goals], Bound, Remaining) :-
+		%%TODO::Rewrite as an if-then-else instead?
+		!, 
 		Bound1 is Bound - 1,
 		Bound1 >= 0,
-%		(bounded_prove([Goal], Bound1, _) -> fail ; bounded_prove(Goals, Bound1, Remaining)).
-		(dfs_interpreter::prove(Goal) -> fail ; bounded_prove(Goals, Bound1, Remaining)).
+		%%This is a temporary workaround that allows iddfs to handle negation.
+		(	dfs_interpreter::prove(Goal) -> 
+			fail 
+		; 	counter::increment, %Inference counting.
+			bounded_prove(Goals, Bound1, Remaining)
+		).
 	bounded_prove([Goal|Goals], Bound, Remaining) :-
 		Bound1 is Bound - 1,
 		Bound1 >= 0,		
-		database::rule(Goal, Body, Goals),
+		rule(Goal, Body, Goals),
+		counter::increment, %Inference counting.
 		bounded_prove(Body, Bound1, Remaining).
 
+	rule(Head, Body, Tail) :-
+		database::rule(Head, Body0, Tail),
+		(	Body0 = {Head} -> 
+			call(Head), %Builtin.
+			Body = Tail
+		;	Body = Body0
+		).	
+ 
 :- end_object.

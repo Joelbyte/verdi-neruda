@@ -25,7 +25,7 @@
 			;	Length1 is Length - 1,
 				Depth1 is Depth + 1,
 				::f(Length, 0, Depth1, Cost1),
-				counter::increment,
+				counter::increment, %Inference counting.
 				minheap::insert(Cost1, state(Gs, Length1, Depth1, Bindings), Heap1, Heap2),
 				prove_branch(Heap2)
 			)
@@ -44,7 +44,7 @@
 				Length is Length1 + Length2 - 1,
 				%%When counter::increment is used instead only the first solution is
 				%%found. The bug must be located!
-				Counter::increment,
+				Counter::increment, %Inference counting.
 				%%If ::f(...) is used instead only the first solution is found. An 
 				%%incompatibility between bagof/3 and ::f?
 				this(Caller),
@@ -55,11 +55,13 @@
 		add_bindings(NewPairs0, Goal, Bindings, Pairs).
 	expand_state(_, _, []).
 
-	rule(Goal, Tail, 1, Tail) :-
-		database::rule(Goal, {Goal}, 1, []), !,
-		call(Goal).
-	rule(Goal, Body, Length, Goals) :-
-		database::rule(Goal, Body, Length, Goals).
+	rule(Head, Body, Length, Tail) :-
+		database::rule(Head, Body0, Length, Tail),
+		(	Body0 = {Head} -> 
+			call(Head), %Builtin.
+			Body = Tail
+		;	Body = Body0
+		).	
 
 	add_bindings([], _, _, []).
 	add_bindings([Cost - State0|States0], Goal, Bindings, [Cost - State|States]) :-

@@ -16,7 +16,7 @@
 		State = state([Goal], []),
 		prove1([State|X], X).
 
-	%%Version which uses a queue.
+	%%Version which uses a simple list.
 	prove_clean(Goal) :-
 		State = state([Goal], []),
 		prove2([State]).
@@ -75,10 +75,12 @@
 		X = Y,
 		execute_bindings(Bs).
 
-	rule(Head, T, T) :-
-		database::rule(Head, {Head}, []), !,
-		call(Head).
 	rule(Head, Body, Tail) :-
-		database::rule(Head, Body, Tail).
+		database::rule(Head, Body0, Tail),
+		(	Body0 = {Head} -> 
+			call(Head), %Builtin.
+			Body = Tail
+		;	Body = Body0
+		).	
 
 :- end_object.
