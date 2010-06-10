@@ -57,9 +57,11 @@
 		findall(
 			Head,
 			(database::rule(Head, Body, PosOrNeg),
+			 debug((write('Trying rule: '), write(rule(Head, Body, PosOrNeg)), nl)),
 			 satisfy_one(Body, Di, NewBody),
 			 debug((write(rule(Head, Body, PosOrNeg)),nl)),
 			 satisfy_all(NewBody, I, []),
+			 debug((write('Rule satisfied: '), write(rule(Head, Body, PosOrNeg)), nl)),
 			 \+ subsumption_member(Head, I)),
 			Heads),
 		findall(
@@ -135,6 +137,6 @@
 
 	%%The double negation is a dirty hack to avoid binding any variables.
 	subsumed(X, Y) :-
-		\+ \+ term::subsumes(X, Y).	   
+		\+ \+ term::subsumes(Y, X).
 
 :- end_object.

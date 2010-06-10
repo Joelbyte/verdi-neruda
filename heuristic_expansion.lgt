@@ -8,7 +8,7 @@
 
 	%Old definition of builtin expansion, remove later.	
 	%term_expansion(builtin(Goal), (rule(Goal, T, 1, T) :- Goal)).
-	term_expansion(builtin(Goal), rule(Goal, {Goal}, 1, [])).
+	term_expansion(builtin(Goal), [builtin(Goal), rule(Goal, {Goal}, 1, [])]).
 
 	term_expansion((Head <- Goals), rule(Head, List, Length, Tail)) :-
 		phrase(::flatten_goals(Goals), List0),

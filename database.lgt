@@ -4,6 +4,9 @@
 	:- dynamic.
 	:- discontiguous(builtin/2).
 	:- discontiguous(builtin/1).
+	:- discontiguous(rule/4).
+	:- discontiguous(rule/3).
+	:- discontiguous(rule/2).
 	:- public(rule/4).
 	:- public(rule/3).
 	:- public(rule/2).
