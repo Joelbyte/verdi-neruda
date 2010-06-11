@@ -1,3 +1,8 @@
+
+:- if(current_logtalk_flag(prolog_dialect, swi)).
+	:- set_prolog_flag(verbose_load, false).
+:- endif.
+
 load_interpreters([]).
 load_interpreters([I|Is]) :-
 	functor(I, Name, _),
