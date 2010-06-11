@@ -71,13 +71,9 @@
 		list::sort(Functors, SortedFunctors),
 		meta::map(writeln, SortedFunctors).
 	dispatch(interpreters) :-
-		findall(
-			Interpreter,
-			(	current_object(Interpreter),
-				Interpreter::current_predicate(prove/1),
-				Interpreter::current_predicate(prove/2)
-			),
-			Interpreters),
+		this(shell(Interpreters0)),
+		pairs::keys(Interpreters0, Interpreters),
+		numbervars(Interpreters, 0, _),				   
 		meta::map(writeln, Interpreters).
 	dispatch(prove(Interpreter, Goal)) :-
 		valid_interpreter(Interpreter, Expander),						
