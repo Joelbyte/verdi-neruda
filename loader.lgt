@@ -1,7 +1,7 @@
 load_interpreters([]).
 load_interpreters([I|Is]) :-
 	functor(I, Name, _),
-	logtalk_load(Name, [hook(debug_expansion(production))]),
+	logtalk_load(Name, [hook(debug_expansion(production)), report(off), reload(skip)]),
 	load_interpreters(Is).
 
 :- initialization((
@@ -13,22 +13,31 @@ load_interpreters([I|Is]) :-
 					a_star_interpreter - heuristic_expansion(production),
 					a_star_interpreter_weighted - heuristic_expansion(production),
 					a_star_interpreter_weighted2 - heuristic_expansion(production)],
-	logtalk_load(library(all_loader)),
-	logtalk_load(heap_loader),
-	logtalk_load(counter_loader),
-	logtalk_load(magic),
-	logtalk_load(flatting),
-	logtalk_load(debug_expansion),
-	logtalk_load(rule_expansion),
-	logtalk_load(magic_expansion),
-	logtalk_load(shell_expansion),
-	logtalk_load(heuristic_expansion),
-	logtalk_load(benchmark_generators),
-	logtalk_load(database, [hook(rule_expansion(production))]),
-	logtalk_load(interpreterp),
-	logtalk_load(best_first),
+	logtalk_load(
+		[library(types_loader),
+		 library(metapredicates_loader),
+		 library(random_loader)],
+		[report(off)]
+	),
+	logtalk_load(
+		[library(heapp),
+		 library(heaps)],
+		[report(off), reload(skip)]
+	),
+	logtalk_load(counter, [report(off), reload(skip)]),
+	logtalk_load(magic, [report(off), reload(skip)]),
+	logtalk_load(flatting, [report(off), reload(skip)]),
+	logtalk_load(debug_expansion, [report(off), reload(skip)]),
+	logtalk_load(rule_expansion, [report(off), reload(skip)]),
+	logtalk_load(magic_expansion, [report(off), reload(skip)]),
+	logtalk_load(shell_expansion, [report(off), reload(skip)]),
+	logtalk_load(heuristic_expansion, [report(off), reload(skip)]),
+	logtalk_load(benchmark_generators, [report(off), reload(skip)]),
+	logtalk_load(database, [hook(rule_expansion(production)), report(off), reload(skip)]),
+	logtalk_load(interpreterp, [report(off), reload(skip)]),
+	logtalk_load(best_first, [report(off), reload(skip)]),
 	pairs::keys(Interpreters, Interpreters1),
 	write(Interpreters1),
 	load_interpreters(Interpreters1),
-	logtalk_load(shell, [hook(debug_expansion(production))]),
+	logtalk_load(shell, [hook(debug_expansion(production)), report(off), reload(skip)]),
 	shell(Interpreters)::init)).

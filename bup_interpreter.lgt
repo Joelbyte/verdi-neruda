@@ -40,9 +40,9 @@
 		Limit \= 0,
 		Limit0 is Limit - 1,
 		debug((
-			write('I is: '), writeln(I),
-			write('DI is: '), writeln(DI),
-			write('Pending0 is: '), writeln(Pending0)
+			write('I is: '), write(I), nl,
+			write('DI is: '), write(DI), nl,
+			write('Pending0 is: '), write(Pending0), nl
 		)),
 		subsumption_next(I, DI, NextI, NextDi, NextPending),
 		(	NextDi = [], NextPending = [] ->
