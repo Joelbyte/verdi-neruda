@@ -38,6 +38,7 @@
 	command(help, 'Prints this message.').
 	command(listing, 'Prints the currently loaded rules.').
 	command(programs, 'Prints the currently loaded predicates.').
+	command(interpreters, 'Prints a list of the available meta-interpreters.').
 	command(prove('Interpreter', 'Goal'), 'Proves Goal with Interpreter.').
 	command(prove('Interpreter', 'Goal', 'Limit'), 'Proves Goal with Interpreter if Limit is not exceeded.').
 	command(benchmark_all('Statistic', 'N'), 'Benchmarks all interpreters with Statistic N times. Benchmarks are stored in the database as bench_goal/1 facts or rules.').
@@ -69,6 +70,15 @@
 			Functors),
 		list::sort(Functors, SortedFunctors),
 		meta::map(writeln, SortedFunctors).
+	dispatch(interpreters) :-
+		findall(
+			Interpreter,
+			(	current_object(Interpreter),
+				Interpreter::current_predicate(prove/1),
+				Interpreter::current_predicate(prove/2)
+			),
+			Interpreters),
+		meta::map(writeln, Interpreters).
 	dispatch(prove(Interpreter, Goal)) :-
 		valid_interpreter(Interpreter, Expander),						
 		load_database(Expander),

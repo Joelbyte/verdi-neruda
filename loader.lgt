@@ -21,7 +21,8 @@ load_interpreters([I|Is]) :-
 	logtalk_load(
 		[library(types_loader),
 		 library(metapredicates_loader),
-		 library(random_loader)],
+		 library(random_loader),
+		 library(hierarchies_loader)],
 		[report(off)]
 	),
 	logtalk_load(
