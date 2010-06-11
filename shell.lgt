@@ -48,9 +48,9 @@
 		findall(rule(Head, Body), 
 			    (
 				 database::rule(Head, Body), 
-			     numbervars(rule(Head, Body), 0, _)
-			    ), 
-			    Rules),
+				 numbervars(rule(Head, Body), 0, _)
+				), 
+			   Rules),
 		meta::map(write_builtin, Builtins),
 		meta::map(write_rule, Rules).
 	dispatch(programs) :-
@@ -61,12 +61,13 @@
 		list::sort(Functors, SortedFunctors),
 		meta::map(writeln, SortedFunctors).
 	dispatch(prove(Interpreter, Goal)) :-
-		this(shell(Interpreters)),
-		functor(Interpreter, Functor, Arity),			% necessary for the parametric
-		functor(InterpreterTemplate, Functor, Arity),	% interpreters
-		list::member(InterpreterTemplate - Expander, Interpreters),
+		valid_interpreter(Interpreter, Expander),						
 		load_database(Expander),
 		prove(Interpreter, Goal).
+	dispatch(prove(Interpreter, Goal, Limit)) :-
+		valid_interpreter(Interpreter, Expander),		
+		load_database(Expander),
+		prove(Interpreter, Goal, Limit).
 	dispatch(benchmark_all(Statistic, N)) :-
 		open('results.txt', append, Stream),
 		this(shell(Interpreters)),
@@ -126,6 +127,15 @@
 	prove(Interpreter, Goal) :-
 		Interpreter::prove(Goal),
 		write(Goal), nl.
+	prove(Interpreter, Goal, Limit) :-
+		Interpreter::prove(Goal, Limit),
+		write(Goal), nl.
+
+	valid_interpreter(Interpreter, Expander) :-
+		this(shell(Interpreters)),
+		functor(Interpreter, Functor, Arity),			% necessary for the parametric
+		functor(InterpreterTemplate, Functor, Arity),	% interpreters
+		list::member(InterpreterTemplate - Expander, Interpreters).
 
 	load_database(Expander) :-
 		logtalk_load(database, [hook(Expander), report(off), plredef(silent), unknown(silent), lgtredef(silent), startup_message(none)]). 

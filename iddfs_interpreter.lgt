@@ -11,15 +11,20 @@
 		parnames is ['Increment']]).
 
 	prove(Goal) :-
+		prove(Goal, -1).		
+	prove(Goal, Limit) :-
 		parameter(1, Increment),
-		prove([Goal], 1, Increment).
+		prove([Goal], 1, Increment, Limit).
 
-	prove(Goals, Bound, Increment) :-
+	prove(Goals, Bound, Increment, Limit) :-
+		Limit \= 0,
 		bounded_prove(Goals, Bound, Remaining),
 		Remaining < Increment.
-	prove(Goals, Bound, Increment) :-
+	prove(Goals, Bound, Increment, Limit) :-
+		Limit \= 0,
+		Limit0 is Limit - 1,		 
 		Bound1 is Bound + Increment,
-		prove(Goals, Bound1, Increment).
+		prove(Goals, Bound1, Increment, Limit0).
 
 	bounded_prove([], Remaining, Remaining).
 	bounded_prove([not(Goal)|Goals], Bound, Remaining) :-

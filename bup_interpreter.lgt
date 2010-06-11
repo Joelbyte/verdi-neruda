@@ -8,19 +8,22 @@
 		date is 2010/04/14,
 		comment is 'Semi-naive bottom-up interpreter. Magic transformation is realized through an expansion hook.']).
 
-    %%Does not work with negated goals! This is a minor issue since these goals
-	%%can be rewritten as rules instead.
-	prove(Goal) :-
-		magic::magic(Goal, MagicGoal),
-		prove(Goal, [MagicGoal], [MagicGoal], _FixPoint).
 
-	prove(Goal, I, DI, FixPoint) :-
-		subsumption_iterate(Goal, I, DI, [], Pending, FixPoint0),
+	prove(Goal) :-
+		prove(Goal, -1).			
+	%%Does not work with negated goals! This is a minor issue since these goals
+	%%can be rewritten as rules instead.
+	prove(Goal, Limit) :-
+		magic::magic(Goal, MagicGoal),
+		prove(Goal, [MagicGoal], [MagicGoal], _FixPoint, Limit).
+
+	prove(Goal, I, DI, FixPoint, Limit) :-
+		subsumption_iterate(Goal, I, DI, [], Pending, FixPoint0, Limit),
 		(	Pending = [] ->
 			FixPoint = FixPoint0
 		;	satisfy_negative_literals(Pending, FixPoint0, Satisfied),
 			subsumption_union(FixPoint0, Satisfied, FixPoint1),
-			prove(Goal, FixPoint1, Satisfied, FixPoint)
+			prove(Goal, FixPoint1, Satisfied, FixPoint, Limit)
 		).
 
 	satisfy_negative_literals([], _, []).
@@ -31,9 +34,11 @@
 		;	satisfy_negative_literals(Pending, FixPoint, Satisfied)						
 		).
 
-	subsumption_iterate(Goal, _, DI, _, _, _) :-
+	subsumption_iterate(Goal, _, DI, _, _, _, _) :-
 		list::member(Goal, DI).
-	subsumption_iterate(Goal, I, DI, Pending0, Pending, Fix) :-
+	subsumption_iterate(Goal, I, DI, Pending0, Pending, Fix, Limit) :-
+		Limit \= 0,
+		Limit0 is Limit - 1,
 		debug((
 			write('I is: '), writeln(I),
 			write('DI is: '), writeln(DI),
@@ -45,7 +50,7 @@
 			Pending = Pending0
 		;	list::append(NextPending, Pending0, Pending1),
 			list::sort(Pending1, Pending2),
-			subsumption_iterate(Goal, NextI, NextDi, Pending2, Pending, Fix)
+			subsumption_iterate(Goal, NextI, NextDi, Pending2, Pending, Fix, Limit0)
 		).
 
 	subsumption_next(I, Di, NextI, NextDi, Pending) :-

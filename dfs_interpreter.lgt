@@ -9,19 +9,24 @@
 		comment is 'Simple interpreter using a depth-first search.']).
 
 	prove(Goal) :-
-		prove_body([Goal]).
+		prove_body([Goal], -1).
 
-	prove_body([]).
-	prove_body([Goal|Goals]) :-
+	prove(Goal, Limit) :-
+		prove_body([Goal], Limit).
+
+	prove_body([], _).
+	prove_body([Goal|Goals], Limit) :-
+		Limit \= 0,
+		Limit0 is Limit - 1,
 		(	Goal = not(G) ->
 			(	prove(G) ->
 				fail
 			;	counter::increment, %Inference counting.
-				prove_body(Goals)
+				prove_body(Goals, Limit0)
 			)
 		;	rule(Goal, Body, Goals),
 			counter::increment, %Inference counting.
-			prove_body(Body)
+			prove_body(Body, Limit0)
 		).
 
 	rule(Head, Body, Tail) :-
