@@ -31,6 +31,7 @@
 	command(listing, 'Prints the currently loaded rules.').
 	command(programs, 'Prints the currently loaded predicates.').
 	command(prove('Interpreter', 'Goal'), 'Proves Goal with Interpreter.').
+	command(prove('Interpreter', 'Goal', 'Limit'), 'Proves Goal with Interpreter if Limit is not exceeded.').
 	command(benchmark_all('Statistic', 'N'), 'Benchmarks all interpreters with Statistic N times. Benchmarks are stored in the database as bench_goal/1 facts or rules.').
 	command(benchmark('Interpreter', 'Statistic', 'N', 'Goal'), 'Benchmarks Interpreter with respect to Statistic, N and Goal.').
 
