@@ -56,13 +56,12 @@
 	expand_state(_, _, []).
 
 	rule(Head, Body, Length, Tail) :-
-		database::rule(Head, Body0, Length, Tail0),
-		(	Body0 = {Head} -> 
-			call(Head), %Builtin.
-			Body = Tail
-		;	Body = Body0,
-			Tail = Tail0
-		).	
+		(	database::builtin(Head) ->
+			call(Head),
+			Body = Tail,
+			Length = 0
+		;	database::rule(Head, Body, Length, Tail)
+		).   
 
 	add_bindings([], _, _, []).
 	add_bindings([Cost - State0|States0], Goal, Bindings, [Cost - State|States]) :-

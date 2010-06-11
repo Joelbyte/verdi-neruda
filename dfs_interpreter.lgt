@@ -25,12 +25,10 @@
 		).
 
 	rule(Head, Body, Tail) :-
-		database::rule(Head, Body0, Tail0),
-		(	Body0 = {Head} -> 
-			call(Head), %Builtin.
+		(	database::builtin(Head) ->
+			call(Head),
 			Body = Tail
-		;	Body = Body0,
-			Tail = Tail0
+		;	database::rule(Head, Body, Tail)
 		).	
 
 :- end_object.
