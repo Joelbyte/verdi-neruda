@@ -39,7 +39,9 @@
 	dispatch(help) :-
 		write_help_message.
 	dispatch(listing) :-
+		findall(builtin(X), database::builtin(X), Builtins),
 		findall(rule(Head, Body), database::rule(Head, Body), Rules),
+		meta::map(write_builtin, Builtins),
 		meta::map(write_rule, Rules).
 	dispatch(programs) :-
 		findall(
@@ -132,6 +134,10 @@
 		;	true
 		).
 
+	%%TODO: Make the output prettier.
+	write_builtin(X) :- 
+		write(X), nl.	
+		
 	write_rule(rule(Head, Body)) :-
 		write(Head),
 		write(' '),
@@ -139,9 +145,6 @@
 		write_body(Body),
 		nl.
 
-	write_body({_}) :-
-		write('	  '),
-		write(builtin).
 	write_body([G]) :-
 		!,
 		write('	  '),

@@ -37,18 +37,12 @@
 	expand_state(_, state([], 0, _, _), []) :- !.
 	expand_state(_Cost0, state([Goal|Goals], Length1, Depth0, Bindings), Pairs) :-
 		Depth is Depth0 + 1,
-		Counter = counter,
 		bagof(Cost - state(Body, Length, Depth, Goal),
 			  Depth0^Length1^Length2^(
 				rule(Goal, Body, Length2, Goals),
 				Length is Length1 + Length2 - 1,
-				%%When counter::increment is used instead only the first solution is
-				%%found. The bug must be located!
-				Counter::increment, %Inference counting.
-				%%If ::f(...) is used instead only the first solution is found. An 
-				%%incompatibility between bagof/3 and ::f?
-				this(Caller),
-				Caller::f(Length1, Length2, Depth, Cost)
+				counter::increment, %Inference counting.
+				::f(Length1, Length2, Depth, Cost)
 			  ),
 			NewPairs0),
 		!,
