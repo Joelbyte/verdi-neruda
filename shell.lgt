@@ -20,7 +20,8 @@
 		write('>> '),
 		read(X),
 		dispatch(X),
-		(get_single_char(110) -> fail ; !),
+		write('Type \'y.\' or \'n.\' followed by return '), nl,
+		(read(n) -> fail ; !),
 		repl.
 	repl :-
 		write('no'), nl,
@@ -112,7 +113,7 @@
 		N1 is N - 1,
 		benchmark(Interpreter, Statistic, N1, Goal, Res0),
 		statistics(Statistic, Before),
-		call_with_depth_limit(Interpreter::prove(Goal), 1000000, _), !,
+		Interpreter::prove(Goal, 1000000), !,
 		statistics(Statistic, After),
 		Res is Res0 + (After - Before).
 
@@ -121,7 +122,7 @@
 		N1 is N - 1,
 		benchmark_failure(Interpreter, Statistic, N1, Goal, Res0),
 		statistics(Statistic, Before),
-		call_with_depth_limit(\+ Interpreter::prove(Goal), 1000000, _), !,
+		\+ Interpreter::prove(Goal, 1000000), !,
 		statistics(Statistic, After),
 		Res is Res0 + (After - Before).
 
