@@ -19,14 +19,21 @@
 		load_database(rule_expansion(production)),
 		write('>> '),
 		read(X),
-		dispatch(X),
-		write('Type \'y.\' or \'n.\' followed by return '), nl,
-		(read(n) -> fail ; !),
+		user_reply(X),
 		repl.
 	repl :-
 		write('no'), nl,
 		repl.
 
+	user_reply(X) :-
+		functor(X,  F, _),
+		(	F = prove ->						
+			dispatch(X),
+			write('Type \'y.\' or \'n.\' followed by return '), nl,
+			(read(n) -> fail ; !)
+		;	dispatch(X)
+		).
+			  
 	command(halt, 'Shuts down the Prolog system.').
 	command(help, 'Prints this message.').
 	command(listing, 'Prints the currently loaded rules.').
