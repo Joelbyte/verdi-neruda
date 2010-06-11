@@ -16,6 +16,6 @@
 		list::length(List0, Length),
 		list::append(List0, Tail, List).
 
-	term_expansion((:- end_object), [(rule(Head,Body) :- rule(Head,Body, _, _)), (:- end_object)]).
+	term_expansion((:- end_object), [(rule(Head,Body) :- rule(Head,Body, _, [])), (:- end_object)]).
 
 :- end_object.  

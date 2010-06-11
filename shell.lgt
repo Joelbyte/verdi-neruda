@@ -39,8 +39,18 @@
 	dispatch(help) :-
 		write_help_message.
 	dispatch(listing) :-
-		findall(builtin(X), database::builtin(X), Builtins),
-		findall(rule(Head, Body), database::rule(Head, Body), Rules),
+		findall(builtin(X), 
+				(
+				 database::builtin(X),
+				 numbervars(X, 0, _)
+				),
+				Builtins),
+		findall(rule(Head, Body), 
+			    (
+				 database::rule(Head, Body), 
+			     numbervars(rule(Head, Body), 0, _)
+			    ), 
+			    Rules),
 		meta::map(write_builtin, Builtins),
 		meta::map(write_rule, Rules).
 	dispatch(programs) :-

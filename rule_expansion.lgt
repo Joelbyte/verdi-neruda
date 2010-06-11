@@ -22,6 +22,6 @@
 	term_expansion((Head <- Goals), rule(Head, List, Tail)) :-
 		phrase(::flatten_goals(Goals), List, Tail).
 
-	term_expansion((:- end_object), [(rule(Head,Body) :- rule(Head,Body,_)), (:- end_object)]).
+	term_expansion((:- end_object), [(rule(Head,Body) :- rule(Head,Body,[])), (:- end_object)]).
 
 :- end_object.

@@ -1,8 +1,4 @@
-%%TODO: Rewrite it using Logtalk's queue instead. It would
-%%make it slightly slower but more readable and similiar to
-%%the best-first framework. When this is done prove2/1, which
-%%is only included since it is easier to understand than prove1/1,
-%%can be removed.
+
 :- object(bfs_interpreter,
 	implements(interpreterp)).
 
@@ -14,55 +10,45 @@
 
 	prove(Goal) :-
 		State = state([Goal], []),
-		prove1([State|X], X).
+		queue::jump(State, Q0 - Q0, Q),
+		prove1(Q).
 
-	%%Version which uses a simple list.
-	prove_clean(Goal) :-
-		State = state([Goal], []),
-		prove2([State]).
-
-	prove1(Tail, Tail2) :-
-		%%This is a terrible but moderately efficient way to
-		%%stop the queue from "hallucinating" new elements. A
-		%%cleaner solution would be to augment prove1/2 with a
-		%%argument which keeps track of the length of the queue.
-		(Tail == Tail2 -> !, fail ; true),
-		Tail = [state([], Bindings)|Tail1],
-		(Tail1 == Tail2 -> ! ; true),
+	prove1(Q) :-
+		queue::head(Q, State), 
+		State = state([], Bindings), %Goal state.	  
 		execute_bindings(Bindings).
-	prove1([state([not(Goal)|Goals], Bindings)|Tail1], Tail2) :-
-		!, %%TODO: Perhaps rewrite it as a if-then-else instead to avoid the cut.
-		(	prove(Goal) ->
-			prove1(Tail1, Tail2) %The whole branch failed. Move on!
-		;	State = state(Goals, Bindings),
-			Tail2 = [State|Tail], %Otherwise append the new state last in the list
-			prove1(Tail1, Tail)	  %and continue with the rest of the branches.
+	prove1(Q) :-
+		queue::serve(Q, State, Q1),
+		State = state(Goals, Bindings),
+		(	Goals = [not(G)|Gs] ->
+			(	prove(G) ->
+				prove1(Q1) %The whole branch failed. Move on!
+			;	State1 = state(Gs, Bindings),
+				queue::join(State1, Q1, Q2),
+				counter::increment, %Inference counting.
+				prove1(Q2) %and continue with the rest of the branches.
+			)
+		;	expand_state(State, NewGoals),
+			queue::join_all(NewGoals, Q1, Q2),
+			prove1(Q2)
 		).
-	prove1([Goal|Goals], Tail1) :-
-		expand_goal1(Goal, Tail1, Tail),
-		prove1(Goals, Tail).
 
-	prove2([state([], Bindings)|_]) :-
-		execute_bindings(Bindings).
-	prove2([Goal|Goals]) :-
-		expand_goal1(Goal, NewGoals, []),
-		list::append(Goals, NewGoals, Goals1),
-		prove2(Goals1).
-
-	expand_goal1(state([], _), Tail, Tail) :- !.
-	expand_goal1(state([Goal|Goals], Bindings), NewGoals, Tail) :-
+	expand_state(state([], _), []) :- !.
+	expand_state(state([Goal|Goals], Bindings), NewGoals) :-
 		%%Find all bodies which unifies with Goal. Since rules are
 		%%represented as difference lists it is easy to append the
 		%%new body with Goals. Goal in the template is a placeholder,
 		%%and is later used in add_bindings/5 to create a unifier
 		%%between the old goal and the resolvent.
-		bagof(
-			state(Body, Goal),
-			rule(Goal, Body, Goals),
+		bagof(state(Body, Goal),
+			  (
+			   rule(Goal, Body, Goals),
+			   counter::increment %Inference counting.
+			  ),
 			NewGoals0),
 		!,
-		add_bindings(NewGoals0, Goal, Bindings, NewGoals, Tail).
-	expand_goal1(_, Tail, Tail).
+		add_bindings(NewGoals0, Goal, Bindings, NewGoals, []).
+	expand_state(_, []).
 
 	add_bindings([], _, _, Tail, Tail).
 	add_bindings([State0|States0], Goal, Bindings, [State|States], Tail) :-
