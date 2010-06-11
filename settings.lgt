@@ -69,6 +69,9 @@ logtalk_library_path(my_project_examples, my_project('examples/')).
 )).
 */
 
+:- initialization(
+	set_logtalk_flag(report, off)
+).
 
 %  To make Logtalk startup and compilation less verbose uncomment the
 %  following lines:

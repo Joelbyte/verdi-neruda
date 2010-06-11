@@ -42,7 +42,6 @@ load_interpreters([I|Is]) :-
 	logtalk_load(interpreterp, [report(off), reload(skip)]),
 	logtalk_load(best_first, [report(off), reload(skip)]),
 	pairs::keys(Interpreters, Interpreters1),
-	write(Interpreters1),
 	load_interpreters(Interpreters1),
 	logtalk_load(shell, [hook(debug_expansion(production)), report(off), reload(skip)]),
 	shell(Interpreters)::init)).
