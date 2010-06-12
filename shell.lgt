@@ -9,33 +9,36 @@
 		parnames is ['Interpreters']]).
 
 	:- public(init/0).
- 
+
 	init :-
 		write('Welcome, noble adventurer, your destiny awaits you.'), nl,
-		write('Type help. for online help'), nl,
+		write('Type "help." for online help.'), nl,
 		repl.
-	
+
 	repl :-
 		write('>> '),
 		flush_output,
-		read(X),
-		user_reply(X),
+		read(Command),
+		user_reply(Command),
 		repl.
 	repl :-
 		write('no'), nl,
 		flush_output,
 		repl.
 
-	user_reply(X) :-
-		functor(X,  F, _),
-		(	F = prove ->						
-			dispatch(X),
-			write('Type "y." or "n." followed by return '), nl,
+	user_reply(Command) :-
+		(	functor(Command, prove, _) ->
+			dispatch(Command),
+			write('Type "m." for more solutions or "e." to end proof:'), nl,
 			flush_output,
-			(read(n) -> fail ; !)
-		;	dispatch(X)
+			read(Reply),
+			(	Reply == m ->
+				fail
+			;	!
+			)
+		;	dispatch(Command)
 		).
-			  
+
 	command(halt, 'Shuts down the Prolog system.').
 	command(help, 'Prints this message.').
 	command(load('Database'), 'Loads the specified database.').
@@ -48,8 +51,8 @@
 	command(benchmark_all('Database'), 'Benchmarks all interpreters. Benchmarks are stored in Database as bench_goal/1 clauses.').
 	command(benchmark('Interpreter', 'Goal', 'Database'), 'Benchmarks Interpreter with respect to Goal and prints the number of inferences.').
 	:- if(predicate_property(statistics(_,_), built_in)).
-	command(benchmark_all('Statistic', 'N', 'Database'), 'Benchmarks all interpreters with Statistic N times. Benchmarks are stored in the database as bench_goal/1 facts or rules.').
-	command(benchmark('Interpreter', 'Statistic', 'N', 'Goal', 'Database'), 'Benchmarks Interpreter with respect to Statistic, N and Goal.').
+		command(benchmark_all('Statistic', 'N', 'Database'), 'Benchmarks all interpreters with Statistic N times. Benchmarks are stored in the database as bench_goal/1 facts or rules.').
+		command(benchmark('Interpreter', 'Statistic', 'N', 'Goal', 'Database'), 'Benchmarks Interpreter with respect to Statistic, N and Goal.').
 	:- endif.
 
 	dispatch(halt) :-
