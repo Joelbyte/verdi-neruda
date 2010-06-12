@@ -126,7 +126,7 @@
 		satisfy_atom(Int, X, DB),
 		satisfy_all(Xs, Int, Pending, DB).
 
-	satisfy_atom(_, {A}, DB) :-
+	satisfy_atom(_, {A}, _) :-
 		!,
 		counter::increment,		%Inference counting.			  
 		call(A).

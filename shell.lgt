@@ -91,7 +91,7 @@
 				nl(Stream),
 				write(Stream, Interpreter),
 				write(Stream, ':'),
-				database::bench_goal(Goal), %Assumes a set of bench_goal/1 clauses in the database.
+				Database::bench_goal(Goal), %Assumes a set of bench_goal/1 clauses in the database.
 				load_database(Database, Expander),
 				write_benchmark(Stream, Interpreter, Statistic, N, Goal),
 				fail
@@ -107,7 +107,7 @@
 			nl(Stream),
 			write(Stream, Interpreter),
 			write(Stream, ':'),
-			database::bench_goal(Goal), %Assumes a set of bench_goal/1 clauses in the database.
+			Database::bench_goal(Goal), %Assumes a set of bench_goal/1 clauses in the database.
 			load_database(Database, Expander),
 			write_benchmark(Stream, Interpreter, Goal),
 			fail
@@ -141,7 +141,7 @@
 		dispatch(Goal),
 		dispatch(Goals).
 	dispatch(Goal) :-
-		prove(dfs_interpreter, Goal).
+		prove(dfs_interpreter, Goal, demodb).
 
 	:- if(predicate_property(statistics(_,_), built_in)).
 		
