@@ -14,10 +14,7 @@ load_interpreters([I|Is]) :-
 					bfs_interpreter - rule_expansion(production),
 					iddfs_interpreter(_Inc) - rule_expansion(production),
 					bup_interpreter - magic_expansion(production),
-					greedy_best_first_interpreter - heuristic_expansion(production),
-					a_star_interpreter - heuristic_expansion(production),
-					a_star_interpreter_weighted - heuristic_expansion(production),
-					a_star_interpreter_weighted2 - heuristic_expansion(production)],
+					a_star_interpreter(_W) - heuristic_expansion(production)],
 	logtalk_load(
 		[library(types_loader),
 		 library(metapredicates_loader),

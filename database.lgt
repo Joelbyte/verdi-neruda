@@ -164,14 +164,6 @@
 %		 isotree(R1, L2) &
 %		 isotree(L1, R2).
 
-	% %%Clauses swapped.
-%	 isotree(t(X, L1, R1), t(X, L2, R2)) <-
-%		 isotree(L1, L2) &
-%		 isotree(R1, R2).
-%	 isotree(t(X, L1, R1), t(X, L2, R2)) <-
-%		 isotree(L1, R2) &
-%		 isotree(R1, L2).
-
 	% %%Clauses swapped and goals in body swapped.
 %	 isotree(t(X, L1, R1), t(X, L2, R2)) <-
 %		 isotree(R1, R2) &

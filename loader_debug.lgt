@@ -9,10 +9,7 @@ load_interpreters([I|Is]) :-
 					bfs_interpreter - rule_expansion(debug),
 					iddfs_interpreter(_Inc) - rule_expansion(debug),
 					bup_interpreter - magic_expansion(debug),
-					greedy_best_first_interpreter - heuristic_expansion(debug),
-					a_star_interpreter - heuristic_expansion(debug),
-					a_star_interpreter_weighted - heuristic_expansion(debug),
-					a_star_interpreter_weighted2 - heuristic_expansion(debug)],
+					a_star_interpreter(_W) - heuristic_expansion(debug)],
 	logtalk_load(
 		[library(types_loader),
 		 library(metapredicates_loader),

@@ -8,7 +8,6 @@
 		date is 2010/04/14,
 		comment is 'Semi-naive bottom-up interpreter. Magic transformation is realized through an expansion hook.']).
 
-
 	prove(Goal) :-
 		prove(Goal, -1).			
 	%%Does not work with negated goals! This is a minor issue since these goals
@@ -28,6 +27,7 @@
 
 	satisfy_negative_literals([], _, []).
 	satisfy_negative_literals([not(X)|Pending], FixPoint, Satisfied) :-
+		counter::increment, %Inference counting.
 		(	\+ list::member(X, FixPoint) ->
 			Satisfied = [not(X)|Satisfied1],
 			satisfy_negative_literals(Pending, FixPoint, Satisfied1)
@@ -129,10 +129,12 @@
 	satisfy_atom(_,A) :-
 		database::builtin(A), 
 		!,
+		counter::increment, %Inference counting.			  
 		database::A.
 
 	satisfy_atom([X| Xs], A) :-
-		(	copy_term(X, A)
+		(	counter::increment, %Inference counting.
+			copy_term(X, A)
 		;	satisfy_atom(Xs, A)
 		).
 
@@ -142,6 +144,8 @@
 
 	%%The double negation is a dirty hack to avoid binding any variables.
 	subsumed(X, Y) :-
+		%counter::increment, %Uncomment this if the subsumed operation should be counted
+							 %as 1 inference. 
 		\+ \+ term::subsumes(Y, X).
 
 :- end_object.
