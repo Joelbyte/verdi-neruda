@@ -13,6 +13,7 @@ CONTENTS
  1. License
  2. Verdi Neruda web site
  3. Installation and running
+ 4. Examples
 
 1. LICENSE
 
@@ -48,13 +49,63 @@ Visit the Verdi Neruda Github www-page at:
 http://joelbyte.github.com/verdi-neruda/
 
 3. INSTALLATION AND RUNNING
+
 Verdi Neruda requires Logtalk 2.x.
 
 * Fetch the latest source code, either as an archive or from the git repository,
   and extract it to a directory of your choice.
-* In the directory, type swilgt.sh (or the corresponding command for another
-  Prolog system).
+* Start Logtalk from that directory.
 * Type {loader}. (Including '.').
 * If everything went according to the plan you should be greeted by the welcoming message.
 
+4. EXAMPLES 
+Follow the previous instructions to get everything up and
+running. First we're going to run some predefined programs in the
+included databases. Begin by typing 'databases.'  from the shell -
+this should print a list of the currently loaded databases. The demo
+database 'demodb' should be included in the list. Next type
+'listing(demodb).' to print the contents of the database. The output
+should look something like:
 
+append([], $VAR(0), $VAR(0)) <- true.  append([$VAR(0)|$VAR(1)],
+	  $VAR(2), [$VAR(0)|$VAR(3)]) <- append($VAR(1), $VAR(2),
+	  $VAR(3)).  .  .  .
+
+Which means that the append/3 program is loaded and ready for
+action. Next we need to decide which interpreter to use. Fortunately
+the shell does not leave much to the imagination - as might be
+expected the 'interpreters.' command prints the currently loaded
+interpreters. The list should look like:
+
+dfs_interpreter bfs_interpreter iddfs_interpreter($VAR(0))
+bup_interpreter a_star_interpreter($VAR(1))
+
+$VAR(0) means that the interpreter is a parametric object and that
+additional information is needed in order to run it. The
+iddfs-interpreter needs to know the increment and the A*-interpreter
+needs to know what weight should be used when calculating the cost of
+nodes. To start with let's use the dfs-interpreter and do something
+exciting, namely appending two lists!
+
+    prove(dfs_interpreter, append([a,b], [c,d], Xs), demodb).
+
+The prove command takes three arguments. The first is a interpreter,
+the second the goal that shall be proved and the last the database
+that the clauses are derived from.
+
+To accomplish the same thing with the iddfs-interpreter with an
+increment of 1 we need only type
+
+   prove(iddfs_interpreter(1), append([a,b], [c,d], Xs), demodb).
+
+The shell also has support for counting logical inferences. To compare
+the dfs- and iddfs-interpreter with the append program we could write:
+
+benchmark(dfs_interpreter, append([a,b,c,d],[e,f], Xs), demodb).  ->
+dfs_interpreter inferences: 5
+
+benchmark(iddfs_interpreter(1), append([a,b,c,d],[e,f], Xs), demodb).
+-> iddfs_interpreter(1) inferences: 15
+
+For more information regarding the built in shell commands consult the
+'help.' command.

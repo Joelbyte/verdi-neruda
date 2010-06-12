@@ -103,7 +103,7 @@
 				write(Stream, ':'),
 				Database::bench_goal(Goal), %Assumes a set of bench_goal/1 clauses in the database.
 				load_database(Database, Expander),
-				write_benchmark(Stream, Interpreter, Statistic, N, Goal),
+				write_benchmark(Stream, Interpreter, Statistic, N, Goal, Database),
 				fail
 			;	write('Done.'), nl, 
 				close(Stream)
@@ -119,7 +119,7 @@
 			write(Stream, ':'),
 			Database::bench_goal(Goal), %Assumes a set of bench_goal/1 clauses in the database.
 			load_database(Database, Expander),
-			write_benchmark(Stream, Interpreter, Goal),
+			write_benchmark(Stream, Interpreter, Goal, Database),
 			fail
 		;	write('Done.'), nl, 
 			close(Stream)
@@ -130,8 +130,8 @@
 		dispatch(benchmark(Interpreter, Statistic, N, Goal, Database)) :-
 			valid_interpreter(Interpreter, Expander),
 			load_database(Database, Expander),
-			(	benchmark(Interpreter, Statistic, N, Goal, Res0)
-			;	benchmark_failure(Interpreter, Statistic, N, Goal, Res0),
+			(	benchmark(Interpreter, Statistic, N, Goal, Res0, Database)
+			;	benchmark_failure(Interpreter, Statistic, N, Goal, Res0, Database),
 				write('(failure) ')
 			),
 			write(Statistic), write(': '),
@@ -145,7 +145,7 @@
 		load_database(Database, Expander),
 		current_output(Stream),
 		write(Stream, Interpreter),
-		write_benchmark(Stream, Interpreter, Goal),
+		write_benchmark(Stream, Interpreter, Goal, Database),
 		nl.
 	dispatch((Goal, Goals)) :-
 		dispatch(Goal),
@@ -155,33 +155,33 @@
 
 	:- if(predicate_property(statistics(_,_), built_in)).
 		
-		benchmark(_, _, 0, _, 0) :- !.
-		benchmark(Interpreter, Statistic, N, Goal, Res) :-
+		benchmark(_, _, 0, _, 0, _) :- !.
+		benchmark(Interpreter, Statistic, N, Goal, Res, Database) :-
 			N1 is N - 1,
-			benchmark(Interpreter, Statistic, N1, Goal, Res0),
+			benchmark(Interpreter, Statistic, N1, Goal, Res0, Database),
 			statistics(Statistic, Before),
-			Interpreter::prove(Goal, 1000000), !,
+			Interpreter::prove(Goal, 1000000, Database), !,
 			statistics(Statistic, After),
 			Res is Res0 + (After - Before).
 
-		benchmark_failure(_, _, 0, _, 0) :- !.
-		benchmark_failure(Interpreter, Statistic, N, Goal, Res) :-
+		benchmark_failure(_, _, 0, _, 0, _) :- !.
+		benchmark_failure(Interpreter, Statistic, N, Goal, Res, Database) :-
 			N1 is N - 1,
-			benchmark_failure(Interpreter, Statistic, N1, Goal, Res0),
+			benchmark_failure(Interpreter, Statistic, N1, Goal, Res0, Database),
 			statistics(Statistic, Before),
-			\+ Interpreter::prove(Goal, 1000000), !,
+			\+ Interpreter::prove(Goal, 1000000, Database), !,
 			statistics(Statistic, After),
 			Res is Res0 + (After - Before).
 	:- endif.
 
-	benchmark(Interpreter, Goal, Inferences) :-
+	benchmark(Interpreter, Goal, Inferences, Database) :-
 		counter::reset,
-		Interpreter::prove(Goal, 1000000), !,
+		Interpreter::prove(Goal, 1000000, Database), !,
 		counter::value(Inferences).
 
-	benchmark_failure(Interpreter, Goal, Inferences) :-
+	benchmark_failure(Interpreter, Goal, Inferences, Database) :-
 		counter::reset,
-		\+ Interpreter::prove(Goal, 1000000), !,
+		\+ Interpreter::prove(Goal, 1000000, Database), !,
 		counter::value(Inferences).		
 
 	prove(Interpreter, Goal, Database) :-
@@ -239,18 +239,18 @@
 		write('&'), nl,
 		write_body(Gs).
 
-	write_benchmark(Stream, Interpreter, Statistic, N, Goal) :-
+	write_benchmark(Stream, Interpreter, Statistic, N, Goal, Database) :-
 		write(Stream, ' '), 
-		(	benchmark(Interpreter, Statistic, N, Goal, Res), !
-		;	benchmark_failure(Interpreter, Statistic, N, Goal, Res),
+		(	benchmark(Interpreter, Statistic, N, Goal, Res, Database), !
+		;	benchmark_failure(Interpreter, Statistic, N, Goal, Res, Database),
 			write(Stream, '(F) ')
 		),
 		write_statistics(Stream, Statistic, N, Res).
 		
-	write_benchmark(Stream, Interpreter, Goal) :-
+	write_benchmark(Stream, Interpreter, Goal, Database) :-
 		write(Stream, ' '), 
-		(	benchmark(Interpreter, Goal, Inferences), !
-		;	benchmark_failure(Interpreter,  Goal, Inferences),
+		(	benchmark(Interpreter, Goal, Inferences, Database), !
+		;	benchmark_failure(Interpreter,  Goal, Inferences, Database),
 			write(Stream, '(F) ')
 		),
 		write('inferences: '),
