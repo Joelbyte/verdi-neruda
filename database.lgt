@@ -5,6 +5,8 @@
 	:- discontiguous(rule/4).
 	:- discontiguous(rule/3).
 	:- discontiguous(rule/2).
+	:- discontiguous(bench_goal/1).
+	:- discontiguous(builtin/1).
 	:- public(rule/4).
 	:- public(rule/3).
 	:- public(rule/2).
@@ -284,7 +286,6 @@
 	bench_goal(theorem(4, T)) :- test_non_theorem(T).
 */
 	%%Benchmark 7 - Solving the 4-queen puzzle.
-
 /*
 	queens(N,Qs) <-
 		range(1,N,Ns) &
