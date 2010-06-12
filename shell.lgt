@@ -16,7 +16,6 @@
 		repl.
 	
 	repl :-
-%		load_database(demo, rule_expansion(production)),
 		write('>> '),
 		read(X),
 		user_reply(X),
@@ -84,11 +83,11 @@
 		meta::map(writeln, Interpreters).
 	dispatch(prove(Interpreter, Goal, Database)) :-
 		valid_interpreter(Interpreter, Expander),						
-		load_database(Expander),
+		load_database(Database, Expander),
 		prove(Interpreter, Goal, Database).
 	dispatch(prove(Interpreter, Goal, Limit, Database)) :-
 		valid_interpreter(Interpreter, Expander),		
-		load_database(Expander),
+		load_database(Database, Expander),
 		prove(Interpreter, Goal, Limit, Database).
 	
 	:- if(predicate_property(statistics(_,_), built_in)).
@@ -100,7 +99,7 @@
 				write(Stream, Interpreter),
 				write(Stream, ':'),
 				database::bench_goal(Goal), %Assumes a set of bench_goal/1 clauses in the database.
-				load_database(Expander),
+				load_database(Database, Expander),
 				write_benchmark(Stream, Interpreter, Statistic, N, Goal),
 				fail
 			;	write('Done.'), nl, 
