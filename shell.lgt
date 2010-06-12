@@ -200,7 +200,7 @@
 	write_help_message :-
 		write('Available commands are:'), nl,
 		(	command(Command, Description),
-			write(Command), write(' : '), write(Description), nl,
+			write(Command), nl, write('  '), write(Description), nl,
 			fail
 		;	true
 		).

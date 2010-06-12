@@ -1,17 +1,14 @@
 
-:- object(database).
+:- object(database,
+	implements(databasep)).
 
 	:- dynamic.
+
 	:- discontiguous(rule/4).
 	:- discontiguous(rule/3).
 	:- discontiguous(rule/2).
 	:- discontiguous(bench_goal/1).
 	:- discontiguous(builtin/1).
-	:- public(rule/4).
-	:- public(rule/3).
-	:- public(rule/2).
-	:- public(builtin/1).
-	:- public(bench_goal/1).
 
 	builtin(write(_)).
 	builtin(nl).
