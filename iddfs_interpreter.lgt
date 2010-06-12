@@ -7,7 +7,7 @@
 		version is 0.1,
 		author is 'Victor Lagerkvist',
 		date is 2010/03/18,
-		comment is 'Iterative deepening depth-first interpreter for general logic programs. Based on source code from The Craft of Prolog, by Richard O\'Keefe.',
+		comment is 'Iterative deepening depth-first interpreter for general logic programs. Based on source code from The Craft of Prolog, by Richard O''Keefe.',
 		parnames is ['Increment']]).
 
 	prove(Goal, DB) :-

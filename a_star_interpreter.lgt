@@ -11,6 +11,6 @@
 
 	f(Length1, Length2, Depth, Cost) :-
 		parameter(1, W),
-		Cost is Depth*(1 - W) + (Length1 + Length2 - 1)*(W).	   
+		Cost is Depth * (1 - W) + (Length1 + Length2 - 1) * W.	   
 
 :- end_object.  

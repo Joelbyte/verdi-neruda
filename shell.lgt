@@ -17,18 +17,21 @@
 	
 	repl :-
 		write('>> '),
+		flush_output,
 		read(X),
 		user_reply(X),
 		repl.
 	repl :-
 		write('no'), nl,
+		flush_output,
 		repl.
 
 	user_reply(X) :-
 		functor(X,  F, _),
 		(	F = prove ->						
 			dispatch(X),
-			write('Type \'y.\' or \'n.\' followed by return '), nl,
+			write('Type "y." or "n." followed by return '), nl,
+			flush_output,
 			(read(n) -> fail ; !)
 		;	dispatch(X)
 		).
