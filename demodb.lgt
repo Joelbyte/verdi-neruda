@@ -2,29 +2,6 @@
 :- object(demodb,
 	implements(databasep)).
 
-	:- dynamic.
-
-	:- discontiguous(rule/4).
-	:- discontiguous(rule/3).
-	:- discontiguous(bench_goal/1).
-	:- discontiguous(builtin/1).
-
-/* Remove these later.
-	builtin(write(_)).
-	builtin(nl).
-	builtin(compare(_,_,_)).
-	builtin(_ = _).
-	builtin(_ \= _).
-	builtin(fail).
-	builtin(_ is _).
-	builtin(_ =\= _).
-	builtin(_ < _).
-	builtin(_ =< _).
-	builtin(_ > _).
-	builtin(_ >= _).
-	builtin(_ \== _).
-*/
-
 	%%Some simple test programs.
 
 	append([], Ys, Ys) <- true.

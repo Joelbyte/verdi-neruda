@@ -38,7 +38,7 @@
 		rule3(T, R).
 
 	rule4([], _) <-
-		fail.
+		{fail}.
 
 	rule4(R, T) <-
 		append([u,u], T, R).
