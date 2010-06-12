@@ -42,8 +42,12 @@
 	command(interpreters, 'Prints a list of the available meta-interpreters.').
 	command(prove('Interpreter', 'Goal', 'Database'), 'Proves Goal with Interpreter using the specified Database.').
 	command(prove('Interpreter', 'Goal', 'Limit', 'Database'), 'Proves Goal with Interpreter if Limit is not exceeded.').
+	command(benchmark_all('Database'), 'Benchmarks all interpreters. Benchmarks are stored in Database as bench_goal/1 clauses.').
+	command(benchmark('Interpreter', 'Goal', 'Database'), 'Benchmarks Interpreter with respect to Goal and prints the number of inferences.').
+	:- if(predicate_property(statistics(_,_), built_in)).
 	command(benchmark_all('Statistic', 'N', 'Database'), 'Benchmarks all interpreters with Statistic N times. Benchmarks are stored in the database as bench_goal/1 facts or rules.').
 	command(benchmark('Interpreter', 'Statistic', 'N', 'Goal', 'Database'), 'Benchmarks Interpreter with respect to Statistic, N and Goal.').
+	:- endif.
 
 	dispatch(halt) :-
 		halt.
