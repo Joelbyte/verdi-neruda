@@ -6,7 +6,7 @@
 		version is 0.1,
 		author is 'Victor Lagerkvist',
 		date is 2010/03/18,
-		comment is 'Interpreter using a breadth-first search.']).
+		comment is 'Breadth-first interpreter for general logic programs.']).
 
 	prove(Goal) :-
 		prove(Goal, -1).	

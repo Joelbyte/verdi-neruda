@@ -2,8 +2,6 @@
 :- object(database).
 
 	:- dynamic.
-	:- discontiguous(builtin/2).
-	:- discontiguous(builtin/1).
 	:- discontiguous(rule/4).
 	:- discontiguous(rule/3).
 	:- discontiguous(rule/2).

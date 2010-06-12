@@ -1,20 +1,43 @@
-%%Simple global counter using asserta/retract.
-%%TODO: Add info directives.
 
 :- object(counter).
 
-   :- dynamic.
+	:- info([
+		version is 0.1,
+		author is 'Victor Lagerkvist',
+		date is 2010/06/12,
+		comment is 'Counter implemented with asserta/retract.']).
 
-   :- initialization(init).
+	:- dynamic.
 
-   :- public(increment/0).
-   :- public(increase/1).
-   :- public(set/1).
-   :- public(value/1).
-   :- public(reset/0).
+	:- initialization(init).
 
-   :- private(c/1).
-   :- dynamic(c/1).
+	:- public(increment/0).
+	:- mode(increment, one).
+	:- info(increment/0, [
+		comment is 'Increment the counter by 1.']).
+
+	:- public(increase/1).
+	:- mode(increase(+number), one).
+	:- info(increase/1, [
+		comment is 'Increments the counter by the specified amount.',
+		argname is ['I']]).
+	
+	:- public(set/1).
+	:- mode(set(+number), one).
+	:- info(set/1, [
+		comment is 'Sets the counter to the specified amount.',
+		argname is ['N']]).
+
+	:- public(value/1).
+	:- mode(value(?number), one).
+	:- info(value/1, [
+		comment is 'Gets the current value of the counter.',
+		argname is ['N']]).
+
+	:- public(reset/0).
+
+	:- private(c/1).
+	:- dynamic(c/1).
 
 	init :-
 		retractall(c(_)),
