@@ -8,21 +8,21 @@
 		date is 2010/04/14,
 		comment is 'Semi-naive bottom-up interpreter for general (stratified) logic programs. Magic transformation is realized through an expansion hook.']).
 
-	prove(Goal) :-
-		prove(Goal, -1).			
+	prove(Goal, DB) :-
+		prove(Goal, -1, DB).			
 	%%Does not work with negated goals! This is a minor issue since these goals
 	%%can be rewritten as rules instead.
-	prove(Goal, Limit) :-
+	prove(Goal, Limit, DB) :-
 		magic::magic(Goal, MagicGoal),
-		prove(Goal, [MagicGoal], [MagicGoal], _FixPoint, Limit).
+		prove(Goal, [MagicGoal], [MagicGoal], _FixPoint, Limit, DB).
 
-	prove(Goal, I, DI, FixPoint, Limit) :-
-		subsumption_iterate(Goal, I, DI, [], Pending, FixPoint0, Limit),
+	prove(Goal, I, DI, FixPoint, Limit, DB) :-
+		subsumption_iterate(Goal, I, DI, [], Pending, FixPoint0, Limit, DB),
 		(	Pending = [] ->
 			FixPoint = FixPoint0
 		;	satisfy_negative_literals(Pending, FixPoint0, Satisfied),
 			subsumption_union(FixPoint0, Satisfied, FixPoint1),
-			prove(Goal, FixPoint1, Satisfied, FixPoint, Limit)
+			prove(Goal, FixPoint1, Satisfied, FixPoint, Limit, DB)
 		).
 
 	satisfy_negative_literals([], _, []).
@@ -34,9 +34,9 @@
 		;	satisfy_negative_literals(Pending, FixPoint, Satisfied)						
 		).
 
-	subsumption_iterate(Goal, _, DI, _, _, _, _) :-
+	subsumption_iterate(Goal, _, DI, _, _, _, _, _) :-
 		list::member(Goal, DI).
-	subsumption_iterate(Goal, I, DI, Pending0, Pending, Fix, Limit) :-
+	subsumption_iterate(Goal, I, DI, Pending0, Pending, Fix, Limit, DB) :-
 		Limit \= 0,
 		Limit0 is Limit - 1,
 		debug((
@@ -44,36 +44,36 @@
 			write('DI is: '), write(DI), nl,
 			write('Pending0 is: '), write(Pending0), nl
 		)),
-		subsumption_next(I, DI, NextI, NextDi, NextPending),
+		subsumption_next(I, DI, NextI, NextDi, NextPending, DB),
 		(	NextDi = [], NextPending = [] ->
 			Fix = NextI,
 			Pending = Pending0
 		;	list::append(NextPending, Pending0, Pending1),
 			list::sort(Pending1, Pending2),
-			subsumption_iterate(Goal, NextI, NextDi, Pending2, Pending, Fix, Limit0)
+			subsumption_iterate(Goal, NextI, NextDi, Pending2, Pending, Fix, Limit0, DB)
 		).
 
-	subsumption_next(I, Di, NextI, NextDi, Pending) :-
-		collect(I, Di, Tmp, Pending),
+	subsumption_next(I, Di, NextI, NextDi, Pending, DB) :-
+		collect(I, Di, Tmp, Pending, DB),
 		subsumption_sort(Tmp, NextDi),
 		subsumption_union(I, NextDi, NextI).
 
-	collect(I, Di, Heads, Pendings) :-
+	collect(I, Di, Heads, Pendings, DB) :-
 		findall(
 			Head,
-			(database::rule(Head, Body, PosOrNeg),
+			(DB::rule(Head, Body, PosOrNeg),
 			 debug((write('Trying rule: '), write(rule(Head, Body, PosOrNeg)), nl)),
-			 satisfy_one(Body, Di, NewBody),
+			 satisfy_one(Body, Di, NewBody, DB),
 			 debug((write(rule(Head, Body, PosOrNeg)),nl)),
-			 satisfy_all(NewBody, I, []),
+			 satisfy_all(NewBody, I, [], DB),
 			 debug((write('Rule satisfied: '), write(rule(Head, Body, PosOrNeg)), nl)),
 			 \+ subsumption_member(Head, I)),
 			Heads),
 		findall(
 			Pending,
-			(database::rule(Head, Body, negative),
-			 satisfy_one(Body, Di, NewBody),
-			 satisfy_all(NewBody, I, [Pending])),
+			(DB::rule(Head, Body, negative),
+			 satisfy_one(Body, Di, NewBody, DB),
+			 satisfy_all(NewBody, I, [Pending], DB)),
 			Pendings).
 
 	subsumption_member(X, [Y|Ys]) :-
@@ -106,36 +106,36 @@
 	subsumption_union([X|Xs], [Y|Ys], [Y|Zs]) :-
 		subsumption_union([X|Xs], Ys, Zs).
 
-	satisfy_one([X|Xs], I, Xs) :-
-		\+ database::builtin(X),
-		satisfy_atom(I, X).
-	satisfy_one([X|Xs], I, [X|Ys]) :-
-		satisfy_one(Xs, I, Ys).
+	satisfy_one([X|Xs], I, Xs, DB) :-
+		\+ DB::builtin(X),
+		satisfy_atom(I, X, DB).
+	satisfy_one([X|Xs], I, [X|Ys], DB) :-
+		satisfy_one(Xs, I, Ys, DB).
 
-	satisfy_all([], _, []).
-	satisfy_all([not(X)|Xs], Int, Pending) :-
+	satisfy_all([], _, [], _).
+	satisfy_all([not(X)|Xs], Int, Pending, DB) :-
 		!,
-		(	satisfy_atom(Int, not(X)) ->
-			satisfy_all(Xs, Int, Pending)
-		;	satisfy_atom(Int, X) -> 
+		(	satisfy_atom(Int, not(X), DB) ->
+			satisfy_all(Xs, Int, Pending, DB)
+		;	satisfy_atom(Int, X, DB) -> 
 			fail
 		;	Pending = [not(X)]
 		).
 						  
-	satisfy_all([X|Xs], Int, Pending) :-
-		satisfy_atom(Int, X),
-		satisfy_all(Xs, Int, Pending).
+	satisfy_all([X|Xs], Int, Pending, DB) :-
+		satisfy_atom(Int, X, DB),
+		satisfy_all(Xs, Int, Pending, DB).
 
-	satisfy_atom(_,A) :-
-		database::builtin(A), 
+	satisfy_atom(_,A, DB) :-
+		DB::builtin(A), 
 		!,
 		counter::increment, %Inference counting.			  
-		database::A.
+		call(A).
 
-	satisfy_atom([X| Xs], A) :-
+	satisfy_atom([X| Xs], A, DB) :-
 		(	counter::increment, %Inference counting.
 			copy_term(X, A)
-		;	satisfy_atom(Xs, A)
+		;	satisfy_atom(Xs, A, DB)
 		).
 
 	split([], [], []).

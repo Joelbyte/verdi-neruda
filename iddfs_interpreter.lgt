@@ -10,47 +10,47 @@
 		comment is 'Iterative deepening depth-first interpreter for general logic programs. Based on source code from The Craft of Prolog, by Richard O\'Keefe.',
 		parnames is ['Increment']]).
 
-	prove(Goal) :-
-		prove(Goal, -1).		
+	prove(Goal, DB) :-
+		prove(Goal, -1, DB).		
 
-	prove(Goal, Limit) :-
+	prove(Goal, Limit, DB) :-
 		parameter(1, Increment),
-		prove([Goal], 1, Increment, Limit).
+		prove([Goal], 1, Increment, Limit, DB).
 
-	prove(Goals, Bound, Increment, Limit) :-
+	prove(Goals, Bound, Increment, Limit, DB) :-
 		Limit \= 0,
-		bounded_prove(Goals, Bound, Remaining),
+		bounded_prove(Goals, Bound, Remaining, DB),
 		Remaining < Increment.
-	prove(Goals, Bound, Increment, Limit) :-
+	prove(Goals, Bound, Increment, Limit, DB) :-
 		Limit \= 0,
 		Limit0 is Limit - 1,		 
 		Bound1 is Bound + Increment,
-		prove(Goals, Bound1, Increment, Limit0).
+		prove(Goals, Bound1, Increment, Limit0, DB).
 
-	bounded_prove([], Remaining, Remaining).
-	bounded_prove([not(Goal)|Goals], Bound, Remaining) :-
+	bounded_prove([], Remaining, Remaining, _).
+	bounded_prove([not(Goal)|Goals], Bound, Remaining, DB) :-
 		%%TODO::Rewrite as an if-then-else instead?
 		!, 
 		Bound1 is Bound - 1,
 		Bound1 >= 0,
 		%%This is a temporary workaround that allows iddfs to handle negation.
-		(	dfs_interpreter::prove(Goal) -> 
+		(	dfs_interpreter::prove(Goal, DB) -> 
 			fail 
 		; 	counter::increment, %Inference counting.
-			bounded_prove(Goals, Bound1, Remaining)
+			bounded_prove(Goals, Bound1, Remaining, DB)
 		).
-	bounded_prove([Goal|Goals], Bound, Remaining) :-
+	bounded_prove([Goal|Goals], Bound, Remaining, DB) :-
 		Bound1 is Bound - 1,
 		Bound1 >= 0,		
-		rule(Goal, Body, Goals),
+		rule(Goal, Body, Goals, DB),
 		counter::increment, %Inference counting.
-		bounded_prove(Body, Bound1, Remaining).
+		bounded_prove(Body, Bound1, Remaining, DB).
 
-	rule(Head, Body, Tail) :-
-		(	database::builtin(Head) ->
+	rule(Head, Body, Tail, DB) :-
+		(	DB::builtin(Head) ->
 			call(Head),
 			Body = Tail
-		;	database::rule(Head, Body, Tail)
+		;	DB::rule(Head, Body, Tail)
 		).	
  
 :- end_object.

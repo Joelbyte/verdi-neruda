@@ -14,41 +14,41 @@
 		[comment is '.',
 		 argnames is ['Length1', 'Length2', 'Depth', 'Cost']]).
 
-	prove(Goal) :-
-		prove(Goal, -1).
+	prove(Goal, DB) :-
+		prove(Goal, -1, DB).
 
-	prove(Goal, Limit) :-
+	prove(Goal, Limit, DB) :-
 		minheap::as_heap([1 - state([Goal], 1, 0, [])], Heap),
-		prove_branch(Heap, Limit).
+		prove_branch(Heap, Limit, DB).
 	
-	prove_branch(Heap, _) :-
+	prove_branch(Heap, _, _) :-
 		minheap::top(Heap, _, state([], _, _, Bindings)),
 		execute_bindings(Bindings).
-	prove_branch(Heap, Limit) :-
+	prove_branch(Heap, Limit, DB) :-
 		minheap::delete(Heap, Cost, State, Heap1),
 		State = state(Goals, Length, Depth, Bindings),
 		0 =\= Depth - Limit, 
 		(   Goals = [not(G)|Gs] ->
-			(   prove(G) -> 
-				prove_branch(Heap1, Limit)
+			(   prove(G, DB) -> 
+				prove_branch(Heap1, Limit, DB)
 			;	Length1 is Length - 1,
 				Depth1 is Depth + 1,
 				::f(Length, 0, Depth1, Cost1),
 				counter::increment, %Inference counting.
 				minheap::insert(Cost1, state(Gs, Length1, Depth1, Bindings), Heap1, Heap2),
-				prove_branch(Heap2, Limit)
+				prove_branch(Heap2, Limit, DB)
 			)
-		;	expand_state(Cost, State, StateCostPairs),
+		;	expand_state(Cost, State, StateCostPairs, DB),
 			minheap::insert_all(StateCostPairs, Heap1, Heap2),
-			prove_branch(Heap2, Limit)
+			prove_branch(Heap2, Limit, DB)
 		).
 
-	expand_state(_, state([], 0, _, _), []) :- !.
-	expand_state(_Cost0, state([Goal|Goals], Length1, Depth0, Bindings), Pairs) :-
+	expand_state(_, state([], 0, _, _), [], _) :- !.
+	expand_state(_Cost0, state([Goal|Goals], Length1, Depth0, Bindings), Pairs, DB) :-
 		Depth is Depth0 + 1,
 		bagof(Cost - state(Body, Length, Depth, Goal),
 			  Depth0^Length1^Length2^(
-				rule(Goal, Body, Length2, Goals),
+				rule(Goal, Body, Length2, Goals, DB),
 				Length is Length1 + Length2 - 1,
 				counter::increment, %Inference counting.
 				::f(Length1, Length2, Depth, Cost)
@@ -56,14 +56,14 @@
 			NewPairs0),
 		!,
 		add_bindings(NewPairs0, Goal, Bindings, Pairs).
-	expand_state(_, _, []).
+	expand_state(_, _, [], _).
 
-	rule(Head, Body, Length, Tail) :-
-		(	database::builtin(Head) ->
+	rule(Head, Body, Length, Tail, DB) :-
+		(	DB::builtin(Head) ->
 			call(Head),
 			Body = Tail,
 			Length = 0
-		;	database::rule(Head, Body, Length, Tail)
+		;	DB::rule(Head, Body, Length, Tail)
 		).   
 
 	add_bindings([], _, _, []).

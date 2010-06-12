@@ -8,38 +8,38 @@
 		date is 2010/03/18,
 		comment is 'Breadth-first interpreter for general logic programs.']).
 
-	prove(Goal) :-
-		prove(Goal, -1).	
+	prove(Goal, DB) :-
+		prove(Goal, -1, DB).	
 
-	prove(Goal, Limit) :-
+	prove(Goal, Limit, DB) :-
 		State = state([Goal], 0, []),
 		queue::jump(State, Q0 - Q0, Q),
-		prove_branch(Q, Limit).
+		prove_branch(Q, Limit, DB).
 
-	prove_branch(Q, _) :-
+	prove_branch(Q, _, _) :-
 		queue::head(Q, State), 
 		State = state([], _, Bindings), %Goal state.	  
 		execute_bindings(Bindings).
-	prove_branch(Q, Limit) :-
+	prove_branch(Q, Limit, DB) :-
 		queue::serve(Q, State, Q1),
 		State = state(Goals, Depth, Bindings),
 		0 =\= Depth - Limit, 
 		(	Goals = [not(G)|Gs] ->
-			(	prove(G) ->
-				prove_branch(Q1, Limit) %The whole branch failed. Move on!
+			(	prove(G, DB) ->
+				prove_branch(Q1, Limit, DB) %The whole branch failed. Move on!
 			;	Depth1 is Depth + 1,
 				State1 = state(Gs, Depth1, Bindings),
 				queue::join(State1, Q1, Q2),
 				counter::increment, %Inference counting.
-				prove_branch(Q2, Limit) %and continue with the rest of the branches.
+				prove_branch(Q2, Limit, DB) %and continue with the rest of the branches.
 			)
-		;	expand_state(State, NewGoals),
+		;	expand_state(State, NewGoals, DB),
 			queue::join_all(NewGoals, Q1, Q2),
-			prove_branch(Q2, Limit)
+			prove_branch(Q2, Limit, DB)
 		).
 
-	expand_state(state([], _, _), []) :- !.
-	expand_state(state([Goal|Goals], Depth0, Bindings), NewGoals) :-
+	expand_state(state([], _, _), [], _) :- !.
+	expand_state(state([Goal|Goals], Depth0, Bindings), NewGoals, DB) :-
 		Depth is Depth0 + 1,
 		%%Find all bodies which unifies with Goal. Since rules are
 		%%represented as difference lists it is easy to append the
@@ -48,13 +48,13 @@
 		%%between the old goal and the resolvent.
 		bagof(state(Body, Depth, Goal),
 			  (
-			   rule(Goal, Body, Goals),
+			   rule(Goal, Body, Goals, DB),
 			   counter::increment %Inference counting.
 			  ),
 			NewGoals0),
 		!,
 		add_bindings(NewGoals0, Goal, Bindings, NewGoals, []).
-	expand_state(_, []).
+	expand_state(_, [], _).
 
 	add_bindings([], _, _, Tail, Tail).
 	add_bindings([State0|States0], Goal, Bindings, [State|States], Tail) :-
@@ -67,11 +67,11 @@
 		X = Y,
 		execute_bindings(Bs).
 
-	rule(Head, Body, Tail) :-
-		(	database::builtin(Head) ->
+	rule(Head, Body, Tail, DB) :-
+		(	DB::builtin(Head) ->
 			call(Head),
 			Body = Tail
-		;	database::rule(Head, Body, Tail)
+		;	DB::rule(Head, Body, Tail)
 		).	
 
 :- end_object.
