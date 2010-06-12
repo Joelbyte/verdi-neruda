@@ -22,7 +22,7 @@
 	:- public(rule/2).
 	:- mode(rule(?callable, -list(callable)), zero_or_more).
 	:- info(rule/2, [
-		comment is '.',
+		comment is 'Clauses for this predicate are automatically generated using term-expansion.',
 		argnames is ['Head', 'Body']]).
 
 	:- public(builtin/1).

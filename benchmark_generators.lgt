@@ -8,6 +8,10 @@
 		comment is 'Generates random data structures for use in benchmarks.']).
 
 	:- public(random_tree/1).
+	:- mode(random_tree(-tree), one).
+	:- info(random_tree/1, [
+		comment is 'Generates a random tree.',
+		argnames is ['Tree']]).
 
 	max_depth(5).
 

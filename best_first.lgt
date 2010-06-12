@@ -9,6 +9,10 @@
 		comment is 'Best-first framework for general logic programs.']).
 
 	:- protected(f/4).
+	:- mode(f(+float, +float, +float, -float), zero_or_more).
+	:- info(f/4,
+		[comment is '.',
+		 argnames is ['Length1', 'Length2', 'Depth', 'Cost']]).
 
 	prove(Goal) :-
 		prove(Goal, -1).

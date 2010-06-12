@@ -6,7 +6,6 @@
 
 	:- discontiguous(rule/4).
 	:- discontiguous(rule/3).
-	:- discontiguous(rule/2).
 	:- discontiguous(bench_goal/1).
 	:- discontiguous(builtin/1).
 

@@ -12,6 +12,7 @@
 
 	prove(Goal) :-
 		prove(Goal, -1).		
+
 	prove(Goal, Limit) :-
 		parameter(1, Increment),
 		prove([Goal], 1, Increment, Limit).
