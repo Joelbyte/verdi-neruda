@@ -47,8 +47,8 @@
 		bounded_prove(Body, Bound1, Remaining, DB).
 
 	rule(Head, Body, Tail, DB) :-
-		(	DB::builtin(Head) ->
-			call(Head),
+		(	Head = {Goal} ->
+			call(Goal),
 			Body = Tail
 		;	DB::rule(Head, Body, Tail)
 		).	

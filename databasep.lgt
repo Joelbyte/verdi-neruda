@@ -25,12 +25,6 @@
 		comment is 'Clauses for this predicate are automatically generated using term-expansion.',
 		argnames is ['Head', 'Body']]).
 
-	:- public(builtin/1).
-	:- mode(builtin(?callable), zero_or_more).
-	:- info(builtin/1, [
-		comment is 'Table of built-in predicates.',
-		argnames is ['BuiltIn']]).
-
 	:- public(bench_goal/1).
 	:- mode(bench_goal(?callable), zero_or_more).
 	:- info(bench_goal/1, [

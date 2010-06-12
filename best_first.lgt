@@ -59,8 +59,8 @@
 	expand_state(_, _, [], _).
 
 	rule(Head, Body, Length, Tail, DB) :-
-		(	DB::builtin(Head) ->
-			call(Head),
+		(	Head = {Goal} ->
+			call(Goal),
 			Body = Tail,
 			Length = 0
 		;	DB::rule(Head, Body, Length, Tail)

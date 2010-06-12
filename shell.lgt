@@ -52,19 +52,12 @@
 	dispatch(load(Database)) :-
 		load_database(Database, rule_expansion(production)).
 	dispatch(listing(Database)) :-
-		findall(builtin(X), 
-				(
-				 Database::builtin(X),
-				 numbervars(X, 0, _)
-				),
-				Builtins),
 		findall(rule(Head, Body), 
 			    (
 				 Database::rule(Head, Body), 
 				 numbervars(rule(Head, Body), 0, _)
 				), 
 			   Rules),
-		meta::map(write_builtin, Builtins),
 		meta::map(write_rule, Rules).
 	dispatch(programs(Database)) :-
 		findall(
@@ -211,10 +204,6 @@
 			fail
 		;	true
 		).
-
-	%%TODO: Make the output prettier.
-	write_builtin(X) :- 
-		write(X), nl.	
 		
 	write_rule(rule(Head, Body)) :-
 		write(Head),

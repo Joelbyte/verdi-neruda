@@ -107,7 +107,7 @@
 		subsumption_union([X|Xs], Ys, Zs).
 
 	satisfy_one([X|Xs], I, Xs, DB) :-
-		\+ DB::builtin(X),
+		X \= {_},
 		satisfy_atom(I, X, DB).
 	satisfy_one([X|Xs], I, [X|Ys], DB) :-
 		satisfy_one(Xs, I, Ys, DB).
@@ -126,14 +126,13 @@
 		satisfy_atom(Int, X, DB),
 		satisfy_all(Xs, Int, Pending, DB).
 
-	satisfy_atom(_,A, DB) :-
-		DB::builtin(A), 
+	satisfy_atom(_, {A}, DB) :-
 		!,
-		counter::increment, %Inference counting.			  
+		counter::increment,		%Inference counting.			  
 		call(A).
 
 	satisfy_atom([X| Xs], A, DB) :-
-		(	counter::increment, %Inference counting.
+		(	counter::increment,	%Inference counting.
 			copy_term(X, A)
 		;	satisfy_atom(Xs, A, DB)
 		).

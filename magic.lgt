@@ -24,7 +24,7 @@
 	magicise(Head,Body,NewHead,[X|Left]) :-
 		magic(Head,X),
 		list::append(Left,[Y|_],Body),
-		\+ database::builtin(Y),
+		Y \= {_},
 		magic_head(Y,NewHead).
 		
 	magic_head(not(X), Y) :-
@@ -35,7 +35,7 @@
 
 	magic(X, Y) :-
 		nonvar(X),
-		\+ database::builtin(X),
+		X \= {_},
 		X =.. [F | Args],
 		atom_concat(magic_, F, G),
 		Y =.. [G | Args].

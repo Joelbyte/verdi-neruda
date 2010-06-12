@@ -16,8 +16,6 @@
 	goal_expansion(Term, Expansion) :-
 		^^goal_expansion(Term, Expansion).
 
-	term_expansion(builtin(Goal), [builtin(Goal), (Goal :- {Goal})]).
-
 	term_expansion((Head <- Goals), MagicClauses) :-
 		findall(
 			rule(MagicHead, MagicBody, NegOrPos),
