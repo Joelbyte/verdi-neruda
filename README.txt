@@ -67,9 +67,13 @@ database 'demodb' should be included in the list. Next type
 'listing(demodb).' to print the contents of the database. The output
 should look something like:
 
-append([], $VAR(0), $VAR(0)) <- true.  append([$VAR(0)|$VAR(1)],
+append([], $VAR(0), $VAR(0)) <- true.  
+append([$VAR(0)|$VAR(1)],
 	  $VAR(2), [$VAR(0)|$VAR(3)]) <- append($VAR(1), $VAR(2),
-	  $VAR(3)).  .  .  .
+	  $VAR(3)).  
+.  
+.  
+.
 
 Which means that the append/3 program is loaded and ready for
 action. Next we need to decide which interpreter to use. Fortunately
@@ -77,8 +81,11 @@ the shell does not leave much to the imagination - as might be
 expected the 'interpreters.' command prints the currently loaded
 interpreters. The list should look like:
 
-dfs_interpreter bfs_interpreter iddfs_interpreter($VAR(0))
-bup_interpreter a_star_interpreter($VAR(1))
+dfs_interpreter 
+bfs_interpreter 
+iddfs_interpreter($VAR(0))
+bup_interpreter 
+a_star_interpreter($VAR(1))
 
 $VAR(0) means that the interpreter is a parametric object and that
 additional information is needed in order to run it. The
