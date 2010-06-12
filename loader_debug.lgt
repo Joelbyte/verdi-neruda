@@ -31,7 +31,7 @@ load_interpreters([I|Is]) :-
 	logtalk_load(heuristic_expansion, [report(warnings), portability(warning)]),
 	logtalk_load(benchmark_generators, [report(warnings), portability(warning)]),
 	logtalk_load(databasep, [report(warnings), portability(warning)]),
-	logtalk_load(database, [hook(rule_expansion(debug)), report(warnings), portability(warning)]),
+	logtalk_load(demodb, [hook(rule_expansion(debug)), report(warnings), portability(warning)]),
 	logtalk_load(interpreterp, [report(warnings), portability(warning)]),
 	logtalk_load(best_first, [report(warnings), portability(warning)]),
 	pairs::keys(Interpreters, Interpreters1),

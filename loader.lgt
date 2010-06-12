@@ -36,7 +36,7 @@ load_interpreters([I|Is]) :-
 	logtalk_load(heuristic_expansion, [report(off), reload(skip)]),
 	logtalk_load(benchmark_generators, [report(off), reload(skip)]),
 	logtalk_load(databasep, [report(off), reload(skip)]),
-	logtalk_load(database, [hook(rule_expansion(production)), report(off), reload(skip)]),
+	logtalk_load(demodb, [hook(rule_expansion(production)), report(off), reload(skip)]),
 	logtalk_load(interpreterp, [report(off), reload(skip)]),
 	logtalk_load(best_first, [report(off), reload(skip)]),
 	pairs::keys(Interpreters, Interpreters1),
