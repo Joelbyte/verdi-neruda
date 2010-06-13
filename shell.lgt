@@ -97,7 +97,7 @@
 	
 	:- if(predicate_property(statistics(_,_), built_in)).
 
-		dispatch(benchmark_all(Name, Statistic, N, Database), VarNames) :-
+		dispatch(benchmark_all(Name, Statistic, N, Database), _) :-
 			open(Name, append, Stream),
 			(	this(shell(Interpreters)),
 				list::member(Interpreter-_, Interpreters),
@@ -107,7 +107,7 @@
 				write(Stream, ':'),
 				Database::bench_goal(Goal), %Assumes a set of bench_goal/1 clauses in the database.
 				load_database(Database, Expander),
-				write_benchmark(Stream, Interpreter, Statistic, N, Goal, Database, VarNames),
+				write_benchmark(Stream, Interpreter, Statistic, N, Goal, Database),
 				fail
 			;	write('Done.'), nl, 
 				close(Stream)
@@ -115,7 +115,7 @@
 
 	:- endif.
 
-	dispatch(benchmark_all(Name, Database), VarNames) :-
+	dispatch(benchmark_all(Name, Database), _) :-
 		open(Name, append, Stream),
 		(	this(shell(Interpreters)),
 			list::member(Interpreter-_, Interpreters),
@@ -125,7 +125,7 @@
 			write(Stream, ':'),
 			Database::bench_goal(Goal), %Assumes a set of bench_goal/1 clauses in the database.
 			load_database(Database, Expander),
-			write_benchmark(Stream, Interpreter, Goal, Database, VarNames),
+			write_benchmark(Stream, Interpreter, Goal, Database),
 			fail
 		;	write('Done.'), nl, 
 			close(Stream)
@@ -133,11 +133,11 @@
 
 	:- if(predicate_property(statistics(_,_), built_in)).
 
-		dispatch(benchmark(Interpreter, Statistic, N, Goal, Database), VarNames) :-
+		dispatch(benchmark(Interpreter, Statistic, N, Goal, Database), _) :-
 			valid_interpreter(Interpreter, Expander),
 			load_database(Database, Expander),
-			(	benchmark(Interpreter, Statistic, N, Goal, Res0, Database, VarNames)
-			;	benchmark_failure(Interpreter, Statistic, N, Goal, Res0, Database, VarNames),
+			(	benchmark(Interpreter, Statistic, N, Goal, Res0, Database)
+			;	benchmark_failure(Interpreter, Statistic, N, Goal, Res0, Database),
 				write('(failure) ')
 			),
 			write(Statistic), write(': '),
@@ -146,12 +146,12 @@
 
 	:- endif.	
 
-	dispatch(benchmark(Interpreter, Goal, Database), VarNames) :-
+	dispatch(benchmark(Interpreter, Goal, Database), _) :-
 		valid_interpreter(Interpreter, Expander),
 		load_database(Database, Expander),
 		current_output(Stream),
 		write(Stream, Interpreter),
-		write_benchmark(Stream, Interpreter, Goal, Database, VarNames),
+		write_benchmark(Stream, Interpreter, Goal, Database),
 		nl.
 	dispatch((Goal, Goals), VarNames) :-
 		dispatch(Goal, VarNames),
@@ -161,33 +161,33 @@
 
 	:- if(predicate_property(statistics(_,_), built_in)).
 		
-		benchmark(_, _, 0, _, 0, _, _) :- !.
-		benchmark(Interpreter, Statistic, N, Goal, Res, Database, VarNames) :-
+		benchmark(_, _, 0, _, 0, _) :- !.
+		benchmark(Interpreter, Statistic, N, Goal, Res, Database) :-
 			N1 is N - 1,
-			benchmark(Interpreter, Statistic, N1, Goal, Res0, Database, VarNames),
+			benchmark(Interpreter, Statistic, N1, Goal, Res0, Database),
 			statistics(Statistic, Before),
-			Interpreter::prove(Goal, 1000000, Database, VarNames), !,
+			Interpreter::prove(Goal, 1000000, Database), !,
 			statistics(Statistic, After),
 			Res is Res0 + (After - Before).
 
-		benchmark_failure(_, _, 0, _, 0, _, _) :- !.
-		benchmark_failure(Interpreter, Statistic, N, Goal, Res, Database, VarNames) :-
+		benchmark_failure(_, _, 0, _, 0, _) :- !.
+		benchmark_failure(Interpreter, Statistic, N, Goal, Res, Database) :-
 			N1 is N - 1,
-			benchmark_failure(Interpreter, Statistic, N1, Goal, Res0, Database, VarNames),
+			benchmark_failure(Interpreter, Statistic, N1, Goal, Res0, Database),
 			statistics(Statistic, Before),
-			\+ Interpreter::prove(Goal, 1000000, Database, VarNames), 
+			\+ Interpreter::prove(Goal, 1000000, Database), 
 			statistics(Statistic, After),
 			Res is Res0 + (After - Before).
 	:- endif.
 
-	benchmark(Interpreter, Goal, Inferences, Database, VarNames) :-
+	benchmark(Interpreter, Goal, Inferences, Database) :-
 		counter::reset,
-		Interpreter::prove(Goal, 1000000, Database, VarNames), !,
+		Interpreter::prove(Goal, 1000000, Database), !,
 		counter::value(Inferences).
 
-	benchmark_failure(Interpreter, Goal, Inferences, Database, VarNames) :-
+	benchmark_failure(Interpreter, Goal, Inferences, Database) :-
 		counter::reset,
-		\+ Interpreter::prove(Goal, 1000000, Database, VarNames), !,
+		\+ Interpreter::prove(Goal, 1000000, Database), !,
 		counter::value(Inferences).		
 
 	prove(Interpreter, Goal, Database, VarNames) :-
@@ -237,7 +237,6 @@
 		 write('Type "help." for online help.'), nl.
 
 	write_statistics(Stream, Statistic, N, Res0) :-
-		debug((write(Stream, Statistic), write(Stream, ': '))),
 		Res1 is Res0/N,
 		Res is floor(Res1),
 		write(Stream, Res).
@@ -274,21 +273,24 @@
 		write('&'), nl,
 		write_body(Gs).
 
-	write_benchmark(Stream, Interpreter, Statistic, N, Goal, Database, VarNames) :-
+	write_benchmark(Stream, Interpreter, Statistic, N, Goal, Database) :-
 		write(Stream, ' '), 
-		(	benchmark(Interpreter, Statistic, N, Goal, Res, Database, VarNames), !
-		;	benchmark_failure(Interpreter, Statistic, N, Goal, Res, Database, VarNames),
+		(	benchmark(Interpreter, Statistic, N, Goal, Res, Database), !
+		;	benchmark_failure(Interpreter, Statistic, N, Goal, Res, Database),
 			write(Stream, '(F) ')
 		),
+		write(Stream, Goal),
+		write(Stream, '-'),
 		write_statistics(Stream, Statistic, N, Res).
 		
-	write_benchmark(Stream, Interpreter, Goal, Database, VarNames) :-
-		write(Stream, ' '), 
-		(	benchmark(Interpreter, Goal, Inferences, Database, VarNames), !
-		;	benchmark_failure(Interpreter,  Goal, Inferences, Database, VarNames),
+	write_benchmark(Stream, Interpreter, Goal, Database) :-
+		write(Stream, ' '),					
+		(	benchmark(Interpreter, Goal, Inferences, Database), !
+		;	benchmark_failure(Interpreter,  Goal, Inferences, Database),
 			write(Stream, '(F) ')
 		),
-		write(Stream, 'inferences: '),
+		write(Stream, Goal),
+		write(Stream, '-'),
 		write(Stream, Inferences).
 
 	writeln(X) :-
