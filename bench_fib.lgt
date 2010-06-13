@@ -2,6 +2,12 @@
 :- object(bench_fib,
 	implements(databasep)).
 
+	:- info([
+		version is 1.0,
+		author is 'Victor Lagerkvist',
+		date is 2010/06/13,
+		comment is 'A simple database for playing with Fibonacci numbers.']).
+
 	%%Calculates the n:th Fibonacci number recursively.
 
 	fib_rec(1, 1) <- true.
