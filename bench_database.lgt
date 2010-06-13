@@ -2,7 +2,7 @@
 :- object(bench_database,
 	implements(databasep)).
 
-	%%Benchmark 8 - Database test for finding related regions.
+	%%Database test for finding related regions.
 
 	query([C1,D1,C2,D2]) <-
 		density(C1,D1) &

@@ -4,10 +4,8 @@
 	:- info([
 		version is 0.1,
 		author is 'Victor Lagerkvist',
-		date is 2010/06/12,
+		date is 2010/06/13,
 		comment is 'Counter implemented with asserta/retract.']).
-
-	:- dynamic.
 
 	:- initialization(init).
 
@@ -35,6 +33,11 @@
 		argname is ['N']]).
 
 	:- public(reset/0).
+
+	:- public(reset/0).
+	:- mode(reset, one).
+	:- info(reset/0, [
+		comment is 'Resets the counter to zero.']).
 
 	:- private(c/1).
 	:- dynamic(c/1).

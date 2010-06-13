@@ -2,9 +2,9 @@
 :- object(shell(_Interpreters)).
 
 	:- info([
-		version is 0.1,
+		version is 1.0,
 		author is 'Victor Lagerkvist and Paulo Moura',
-		date is 2010/03/23,
+		date is 2010/06/13,
 		comment is 'Prolog shell for the interpreters.',
 		parnames is ['Interpreters']]).
 
@@ -169,7 +169,7 @@
 			N1 is N - 1,
 			benchmark_failure(Interpreter, Statistic, N1, Goal, Res0, Database),
 			statistics(Statistic, Before),
-			\+ Interpreter::prove(Goal, 1000000, Database), !,
+			\+ Interpreter::prove(Goal, 1000000, Database), 
 			statistics(Statistic, After),
 			Res is Res0 + (After - Before).
 	:- endif.

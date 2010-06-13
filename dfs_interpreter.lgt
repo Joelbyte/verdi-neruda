@@ -3,9 +3,9 @@
 	implements(interpreterp)).
 
 	:- info([
-		version is 0.1,
+		version is 1.0,
 		author is 'Victor Lagerkvist',
-		date is 2010/03/18,
+		date is 2010/06/13,
 		comment is 'Depth-first interpreter for general logic programs.']).
 
 	prove(Goal, DB) :- 
@@ -16,7 +16,7 @@
 
 	prove_body([], _, _).
 	prove_body([Goal|Goals], Limit, DB) :-
-		Limit \= 0,
+		Limit =\= 0,
 		Limit0 is Limit - 1,
 		(	Goal = not(G) ->
 			(	prove(G, DB) ->

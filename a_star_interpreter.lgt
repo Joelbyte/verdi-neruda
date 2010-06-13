@@ -3,9 +3,9 @@
 	imports(best_first)).
 
 	:- info([
-		version is 0.1,
+		version is 1.0,
 		author is 'Victor Lagerkvist',
-		date is 2010/03/18,
+		date is 2010/06/13,
 		comment is 'A* interpreter for general logic programs. The parameter W is used to fine tune the behaviour. W = 0 gives us a breadth-first search and W = 1 gives us a greedy best-first search.',
 		parnames is ['W']]).
 

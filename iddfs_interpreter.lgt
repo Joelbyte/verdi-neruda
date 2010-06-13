@@ -4,9 +4,9 @@
 	implements(interpreterp)).	
 
 	:- info([
-		version is 0.1,
+		version is 1.0,
 		author is 'Victor Lagerkvist',
-		date is 2010/03/18,
+		date is 2010/06/13,
 		comment is 'Iterative deepening depth-first interpreter for general logic programs. Based on source code from The Craft of Prolog, by Richard O''Keefe.',
 		parnames is ['Increment']]).
 
@@ -18,11 +18,11 @@
 		prove([Goal], 1, Increment, Limit, DB).
 
 	prove(Goals, Bound, Increment, Limit, DB) :-
-		Limit \= 0,
+		Limit =\= 0,
 		bounded_prove(Goals, Bound, Remaining, DB),
 		Remaining < Increment.
 	prove(Goals, Bound, Increment, Limit, DB) :-
-		Limit \= 0,
+		Limit =\= 0,
 		Limit0 is Limit - 1,		 
 		Bound1 is Bound + Increment,
 		prove(Goals, Bound1, Increment, Limit0, DB).
