@@ -11,8 +11,10 @@
 	:- public(init/0).
 
 	init :-
-		write('Welcome, noble adventurer, your destiny awaits you.'), nl,
-		write('Type "help." for online help.'), nl,
+		write_release_information,
+		nl,
+		nl,
+		write_welcoming_message, 
 		repl.
 
 	repl :-
@@ -204,6 +206,20 @@
 
 	load_database(Database, Expander) :-
 		logtalk_load(Database, [hook(Expander), report(off), plredef(silent), unknown(silent), lgtredef(silent), startup_message(none)]). 
+
+
+	write_release_information :-
+		Version = '1.0',
+		Author = 'Victor Lagerkvist',
+		write('Verdi Neruda version '),
+		write(Version),
+		write(' by '), 
+		write(Author),
+		write('.').
+
+	write_welcoming_message :- 
+		 write('Welcome, noble adventurer, your destiny awaits you!'), nl,
+		 write('Type "help." for online help.'), nl.
 
 	write_statistics(Stream, Statistic, N, Res0) :-
 		debug((write(Stream, Statistic), write(Stream, ': '))),
