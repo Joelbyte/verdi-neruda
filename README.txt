@@ -14,6 +14,7 @@ CONTENTS
  2. Verdi Neruda web site
  3. Installation and running
  4. Examples
+ 5. Authors
 
 1. LICENSE
 
@@ -47,7 +48,7 @@ official policies, either expressed or implied, of the copyright holders.
 
 2. VERDI NERUDA WEB SITE
 
-Visit the Verdi Neruda Github www-page at:
+Visit the Verdi Neruda GitHub www-page at:
 http://joelbyte.github.com/verdi-neruda/
 
 3. INSTALLATION AND RUNNING
@@ -92,7 +93,7 @@ interpreters. The list should look like:
     a_star_interpreter(A)
 
 The variables means that the interpreters are parametric objects and
-that additional information is needed in order to run it. The
+that additional information is needed in order to run them. The
 iddfs-interpreter needs to know the increment and the A*-interpreter
 needs to know what weight should be used when calculating the cost of
 nodes. To start with let's use the dfs-interpreter and do something
@@ -120,3 +121,10 @@ benchmark(iddfs_interpreter(1), append([a,b,c,d],[e,f], Xs), demodb).
 
 For more information regarding the built in shell commands consult the
 'help.' command.
+
+5. AUTHORS
+The bulk of Verdi Neruda was written by Victor Lagerkvist during his
+bachelor thesis at Linköping university in the spring of 2010. Paulo
+Moura also helped a great deal during the later stages of development,
+especially with regards to compatibility between various Prolog
+systems.
