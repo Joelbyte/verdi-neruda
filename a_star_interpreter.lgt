@@ -11,6 +11,12 @@
 
 	f(Length1, Length2, Depth, Cost) :-
 		parameter(1, W),
+		(	var(Increment) ->
+			% use a default value
+			Increment = 0.5
+		;	% use parameter value
+			true
+		),
 		Cost is Depth * (1 - W) + (Length1 + Length2 - 1) * W.	   
 
 :- end_object.  

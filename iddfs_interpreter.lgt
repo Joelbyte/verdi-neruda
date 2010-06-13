@@ -15,6 +15,12 @@
 
 	prove(Goal, Limit, DB) :-
 		parameter(1, Increment),
+		(	var(Increment) ->
+			% use a default value
+			Increment = 1
+		;	% use parameter value
+			true
+		),
 		prove([Goal], 1, Increment, Limit, DB).
 
 	prove(Goals, Bound, Increment, Limit, DB) :-
