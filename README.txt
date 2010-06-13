@@ -2,9 +2,9 @@
 Verdi Neruda - Meta-interpreter collection for Prolog.
 Release 1.0 
 
-Copyright (c) 2010  Victor Lagerkvist. All Rights Reserved.
-Verdi Neruda is free software.  You can redistribute it and/or modify
-it under the terms of the simplified BSD license.
+Copyright (c) 2010  Victor Lagerkvist.      All Rights Reserved.
+Verdi Neruda is free software.    You can redistribute it and/or
+modify it under the terms of the simplified BSD license.
 ================================================================
 
 
@@ -19,29 +19,31 @@ CONTENTS
 
 Copyright 2010 Victor Lagerkvist. All rights reserved.
 
-Redistribution and use in source and binary forms, with or without modification, are
-permitted provided that the following conditions are met:
+Redistribution and use in source and binary forms, with or without
+modification, are permitted provided that the following conditions
+are met:
 
-   1. Redistributions of source code must retain the above copyright notice, this list of
-      conditions and the following disclaimer.
+   1. Redistributions of source code must retain the above copyright
+      notice, this list of conditions and the following disclaimer.
 
-   2. Redistributions in binary form must reproduce the above copyright notice, this list
-      of conditions and the following disclaimer in the documentation and/or other materials
-      provided with the distribution.
+   2. Redistributions in binary form must reproduce the above copyright
+      notice, this list of conditions and the following disclaimer in the
+      documentation and/or other materials provided with the distribution.
 
-THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS ``AS IS'' AND ANY EXPRESS OR IMPLIED
-WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND
-FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDERS OR
-CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
-CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
-SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON
-ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
-NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
-ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS ``AS IS'' AND ANY EXPRESS
+OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
+OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO
+EVENT SHALL THE COPYRIGHT HOLDERS OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT,
+INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING,
+BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
+OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
+NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
+EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-The views and conclusions contained in the software and documentation are those of the
-authors and should not be interpreted as representing official policies, either expressed
-or implied, of the copyright holders.
+The views and conclusions contained in the software and documentation
+are those of the authors and should not be interpreted as representing
+official policies, either expressed or implied, of the copyright holders.
 
 2. VERDI NERUDA WEB SITE
 
@@ -52,13 +54,15 @@ http://joelbyte.github.com/verdi-neruda/
 
 Verdi Neruda requires Logtalk 2.x.
 
-* Fetch the latest source code, either as an archive or from the git repository,
-  and extract it to a directory of your choice.
+* Fetch the latest source code, either as an archive or from the git
+  repository, and extract it to a directory of your choice.
 * Start Logtalk from that directory.
 * Type {loader}. (Including '.').
-* If everything went according to the plan you should be greeted by the welcoming message.
+* If everything went according to the plan you should be greeted by
+  the welcoming message.
 
-4. EXAMPLES 
+4. EXAMPLES
+
 Follow the previous instructions to get everything up and
 running. First we're going to run some predefined programs in the
 included databases. Begin by typing 'databases.'  from the shell -
@@ -67,28 +71,28 @@ database 'demodb' should be included in the list. Next type
 'listing(demodb).' to print the contents of the database. The output
 should look something like:
 
-append([], $VAR(0), $VAR(0)) <- true.  
-append([$VAR(0)|$VAR(1)],
-	  $VAR(2), [$VAR(0)|$VAR(3)]) <- append($VAR(1), $VAR(2),
-	  $VAR(3)).  
-.  
-.  
-.
+    append([],A,A) <-
+    	  true.
+    append([A|B],C,[A|D]) <-
+    	  append(B,C,D).
+    .  
+    .  
+    .
 
 Which means that the append/3 program is loaded and ready for
 action. Next we need to decide which interpreter to use. Fortunately
 the shell does not leave much to the imagination - as might be
-expected the 'interpreters.' command prints the currently loaded
+expected, the 'interpreters.' command prints the currently loaded
 interpreters. The list should look like:
 
-dfs_interpreter 
-bfs_interpreter 
-iddfs_interpreter($VAR(0))
-bup_interpreter 
-a_star_interpreter($VAR(1))
+    dfs_interpreter 
+    bfs_interpreter 
+    iddfs_interpreter(A)
+    bup_interpreter 
+    a_star_interpreter(A)
 
-$VAR(0) means that the interpreter is a parametric object and that
-additional information is needed in order to run it. The
+The variables means that the interpreters are parametric objects and
+that additional information is needed in order to run it. The
 iddfs-interpreter needs to know the increment and the A*-interpreter
 needs to know what weight should be used when calculating the cost of
 nodes. To start with let's use the dfs-interpreter and do something
