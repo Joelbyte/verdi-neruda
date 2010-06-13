@@ -1,3 +1,4 @@
+
 :- object(bench_isotree,
 	implements(databasep)).
 

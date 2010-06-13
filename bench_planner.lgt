@@ -1,4 +1,5 @@
-:- object(bench_database,
+
+:- object(bench_planner,
 	implements(databasep)).
 
 	member(X, [X|_]) <- true.

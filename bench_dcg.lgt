@@ -1,3 +1,4 @@
+
 :- object(bench_dcg, 
 	implements(databasep)).
 
