@@ -30,9 +30,9 @@
 		fib_iter(N1, N, X3, X2, X).
 
 	bench_goal(fib_rec(5, 5)).
-	bench_goal(fib_rec(20, 6765)).
+	bench_goal(fib_rec(10, 55)).
 
 	bench_goal(fib_iter(5, 5)).
-	bench_goal(fib_iter(20, 6765)).
+	bench_goal(fib_iter(10, 55)).
 
 :- end_object.

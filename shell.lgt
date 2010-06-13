@@ -48,10 +48,10 @@
 	command(interpreters, 'Prints a list of the available meta-interpreters.').
 	command(prove('Interpreter', 'Goal', 'Database'), 'Proves Goal with Interpreter using the specified Database.').
 	command(prove('Interpreter', 'Goal', 'Limit', 'Database'), 'Proves Goal with Interpreter if Limit is not exceeded.').
-	command(benchmark_all('Database'), 'Benchmarks all interpreters. Benchmarks are stored in Database as bench_goal/1 clauses.').
+	command(benchmark_all('FileName', 'Database'), 'Benchmarks all interpreters. Benchmarks are stored in Database as bench_goal/1 clauses.').
 	command(benchmark('Interpreter', 'Goal', 'Database'), 'Benchmarks Interpreter with respect to Goal and prints the number of inferences.').
 	:- if(predicate_property(statistics(_,_), built_in)).
-		command(benchmark_all('Statistic', 'N', 'Database'), 'Benchmarks all interpreters with Statistic N times. Benchmarks are stored in the database as bench_goal/1 facts or rules.').
+		command(benchmark_all('FileName', 'Statistic', 'N', 'Database'), 'Benchmarks all interpreters with Statistic N times. Benchmarks are stored in the database as bench_goal/1 facts or rules.').
 		command(benchmark('Interpreter', 'Statistic', 'N', 'Goal', 'Database'), 'Benchmarks Interpreter with respect to Statistic, N and Goal.').
 	:- endif.
 
@@ -95,9 +95,11 @@
 	
 	:- if(predicate_property(statistics(_,_), built_in)).
 
-		dispatch(benchmark_all(Statistic, N, Database)) :-
-			open('results.txt', append, Stream),
-			(	valid_interpreter(Interpreter, Expander),
+		dispatch(benchmark_all(Name, Statistic, N, Database)) :-
+			open(Name, append, Stream),
+			(	this(shell(Interpreters)),
+				list::member(Interpreter-_, Interpreters),
+				valid_interpreter(Interpreter, Expander),
 				nl(Stream),
 				write(Stream, Interpreter),
 				write(Stream, ':'),
@@ -112,8 +114,10 @@
 	:- endif.
 
 	dispatch(benchmark_all(Database)) :-
-		open('results.txt', append, Stream),
-		(	valid_interpreter(Interpreter, Expander),
+		open(Name, append, Stream),
+		(	this(shell(Interpreters)),
+			list::member(Interpreter-_, Interpreters),
+			valid_interpreter(Interpreter, Expander),
 			nl(Stream),
 			write(Stream, Interpreter),
 			write(Stream, ':'),
@@ -253,7 +257,7 @@
 		;	benchmark_failure(Interpreter,  Goal, Inferences, Database),
 			write(Stream, '(F) ')
 		),
-		write('inferences: '),
+		write(Stream, 'inferences: '),
 		write(Stream, Inferences).
 
 	writeln(X) :-

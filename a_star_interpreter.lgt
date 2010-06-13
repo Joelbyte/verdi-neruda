@@ -11,9 +11,9 @@
 
 	f(Length1, Length2, Depth, Cost) :-
 		parameter(1, W),
-		(	var(Increment) ->
+		(	var(W) ->
 			% use a default value
-			Increment = 0.5
+			W = 0.5
 		;	% use parameter value
 			true
 		),
