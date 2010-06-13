@@ -2,7 +2,7 @@
 :- object(counter).
 
 	:- info([
-		version is 0.1,
+		version is 1.0,
 		author is 'Victor Lagerkvist',
 		date is 2010/06/13,
 		comment is 'Counter implemented with asserta/retract.']).
@@ -33,7 +33,6 @@
 		argname is ['N']]).
 
 	:- public(reset/0).
-
 	:- mode(reset, one).
 	:- info(reset/0, [
 		comment is 'Resets the counter to zero.']).
