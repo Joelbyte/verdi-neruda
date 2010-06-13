@@ -91,12 +91,17 @@ http://joelbyte.github.com/verdi-neruda/
 
 Verdi Neruda requires Logtalk 2.40.0.
 
-* Fetch the latest source code, either as an archive or from the git
-  repository, and extract it to a directory of your choice.
+To use the snapshot of Verdi Neruda bundled with Logtalk:
+* Start Logtalk.
+* Type {verdi_neruda(loader)}. (Including '.').
+
+To use the latest version of Verdi Neruda, fetch the latest source
+code, either as an archive or from the git repository, extract it to a
+directory of your choice, and:
 * Start Logtalk from that directory.
 * Type {loader}. (Including '.').
-* If everything went according to the plan you should be greeted by
-  the welcoming message.
+If everything went according to the plan you should be greeted by
+the welcoming message.
 
 5. EXAMPLES
 
