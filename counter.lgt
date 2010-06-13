@@ -34,7 +34,6 @@
 
 	:- public(reset/0).
 
-	:- public(reset/0).
 	:- mode(reset, one).
 	:- info(reset/0, [
 		comment is 'Resets the counter to zero.']).
