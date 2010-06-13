@@ -1,6 +1,8 @@
 
 :- if(current_logtalk_flag(prolog_dialect, swi)).
 	:- set_prolog_flag(verbose_load, false).
+:- elif((current_logtalk_flag(prolog_dialect, sictus), current_logtalk_flag(prolog_version, (4, _, _)))).
+	:- set_prolog_flag(informational, off).
 :- endif.
 
 load_interpreters([]).
