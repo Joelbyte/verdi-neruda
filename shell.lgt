@@ -115,7 +115,7 @@
 
 	:- endif.
 
-	dispatch(benchmark_all(Database), VarNames) :-
+	dispatch(benchmark_all(Name, Database), VarNames) :-
 		open(Name, append, Stream),
 		(	this(shell(Interpreters)),
 			list::member(Interpreter-_, Interpreters),
@@ -193,12 +193,12 @@
 	prove(Interpreter, Goal, Database, VarNames) :-
 		Interpreter::prove(Goal, Database),
 		unify_variable_names(VarNames),
-		write(Goal), nl.
+		meta::map(writeln, VarNames).
 
 	prove(Interpreter, Goal, Limit, Database, VarNames) :-
 		Interpreter::prove(Goal, Limit, Database),
 		unify_variable_names(VarNames),
-		write(Goal), nl.
+		meta::map(writeln, VarNames).
 
 	unify_variable_names([]).
 	unify_variable_names([Var = Name| VarNames]) :-
@@ -216,7 +216,6 @@
 
 	load_database(Database, Expander) :-
 		logtalk_load(Database, [hook(Expander), report(off), plredef(silent), unknown(silent), lgtredef(silent), startup_message(none)]). 
-
 
 	write_release_information :-
 		Version = '1.0',
