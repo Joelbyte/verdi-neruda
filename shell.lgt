@@ -192,14 +192,20 @@
 
 	prove(Interpreter, Goal, Database, VarNames) :-
 		Interpreter::prove(Goal, Database),
-		unify_variable_names(VarNames),
-		meta::map(writeln, VarNames).
+		write_unifiers(VarNames).
 
 	prove(Interpreter, Goal, Limit, Database, VarNames) :-
 		Interpreter::prove(Goal, Limit, Database),
-		unify_variable_names(VarNames),
-		meta::map(writeln, VarNames).
+		write_unifiers(VarNames).
 
+	write_unifiers(VarNames) :-
+		unify_variable_names(VarNames),
+		(	VarNames = [] ->
+				write('true.'),
+				nl
+			;	meta::map(writeln, VarNames)
+		).
+		 
 	unify_variable_names([]).
 	unify_variable_names([Var = Name| VarNames]) :-
 		(	var(Var) ->
